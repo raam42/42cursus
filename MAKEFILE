@@ -1,5 +1,24 @@
-BONUS_SRCS = checker.c
-BONUS_OBJS = $(BONUS_SRCS:.c=.o)
+NAME        = push_swap
+BONUS_NAME  = checker
 
-bonus: $(BONUS_OBJS)
-    $(CC) $(CFLAGS) $(BONUS_OBJS) $(OBJS) -o checker
+SRCS        = main.c parser.c ...
+OBJS        = $(SRCS:.c=.o)
+
+BONUS_SRC   = checker.c
+BONUS_OBJ   = $(BONUS_SRC:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+    $(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+bonus: $(OBJS) $(BONUS_OBJ)
+    $(CC) $(CFLAGS) $(OBJS) $(BONUS_OBJ) -o $(BONUS_NAME)
+
+clean:
+    rm -f $(OBJS) $(BONUS_OBJ)
+
+fclean: clean
+    rm -f $(NAME) $(BONUS_NAME)
+
+re: fclean all
