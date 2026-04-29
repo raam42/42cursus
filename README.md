@@ -216,9 +216,8 @@ The adaptive strategy performs **no sorting itself**; it only selects the approp
 
 ## Team contributions
 
-*   **roandres**: parsing, validation, disorder metric, indexing, medium strategy, dispatcher, benchmarking
-*   **rodrigoa**: complex strategy design, optimisation, algorithm validation
-
+*   **roandres**
+*   **rodrigoa**
 ***
 
 ## Use of Artificial Intelligence
@@ -239,9 +238,3 @@ All code was fully reviewed, understood, and validated by both team members.
 *   Algorithm complexity analysis (Big‑O)
 *   Chunk‑based sorting strategies
 *   Radix sorting on constrained models
-
-```
-
----
-
-```
