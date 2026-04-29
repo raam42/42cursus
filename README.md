@@ -1,6 +1,3 @@
-***
-
-````markdown
 _This project has been created as part of the 42 curriculum by **roandres** and **rodrigoa**._
 
 # push_swap
