@@ -13,8 +13,8 @@ static void    run_adaptive(t_stack_node **a, t_stack_node **b, t_ctx *ctx)
     if (disorder < 0.2f)
     {
         if (ctx->bench)
-            ctx->b.used_strategy = SIMPLE;
-        simple_sort(a, b);
+            ctx->b.used_strategy = LINEAR;
+        linear_sort(a, b);
     }
     else if (disorder < 0.5f)
     {
