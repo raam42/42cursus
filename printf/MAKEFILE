@@ -1,0 +1,58 @@
+# =======================
+# TARGET NAME
+# =======================
+
+NAME = libftprintf.a
+
+# =======================
+# COMPILER & FLAGS
+# =======================
+
+CC      = cc
+CFLAGS  = -Wall -Wextra -Werror
+
+# =======================
+# LIBFT
+# =======================
+
+LIBFT_DIR = libft
+LIBFT     = $(LIBFT_DIR)/libft.a
+
+# =======================
+# SOURCES
+# =======================
+
+SRCS =    ft_printf.c \
+        ft_print_char.c \
+        ft_print_str.c \
+        ft_print_int.c \
+        ft_print_uint.c \
+        ft_print_hex.c \
+        ft_print_ptr.c
+
+OBJS = $(SRCS:.c=.o)
+
+# =======================
+# RULES
+# =======================
+
+all: $(NAME)
+
+$(LIBFT):
+    $(MAKE) -C $(LIBFT_DIR)
+
+$(NAME): $(LIBFT) $(OBJS)
+    cp $(LIBFT) $(NAME)
+    ar rcs $(NAME) $(OBJS)
+
+clean:
+    rm -f $(OBJS)
+    $(MAKE) -C $(LIBFT_DIR) clean
+
+fclean: clean
+    rm -f $(NAME)
+    $(MAKE) -C $(LIBFT_DIR) fclean
+
+re: fclean all
+
+.PHONY: all clean fclean re
