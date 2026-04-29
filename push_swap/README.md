@@ -178,23 +178,35 @@ This strategy is designed for large and highly disordered inputs (e.g. 500+ numb
 
 ## Strategy 4 — Adaptive (default)
 
-**Flag:** `--adaptive` (default)
+The adaptive strategy is the default execution mode when no explicit strategy flag is provided.
 
-The adaptive strategy selects an internal algorithm based on the disorder index:
+Before performing any operation, the program computes a **disorder index** in the range **[0.0, 1.0]**, which measures how far the initial stack is from being sorted. Based on this value, the program automatically selects the most appropriate internal algorithm, ensuring compliance with the complexity constraints defined in the subject.
 
-| Disorder range | Strategy used | Complexity   |
-| -------------- | ------------- | ------------ |
-| `< 0.2`        | Simple        | `O(n)`       |
-| `< 0.5`        | Medium        | `O(n√n)`     |
-| `≥ 0.5`        | Complex       | `O(n log n)` |
+The adaptive strategy uses the following decision model:
 
-### Threshold justification
+| Disorder range | Strategy used | Complexity (push_swap model) |
+|---------------|--------------|-------------------------------|
+| `< 0.2`       | Linear strategy | `O(n)` |
+| `< 0.5`       | Medium strategy | `O(n √n)` |
+| `≥ 0.5`       | Complex strategy | `O(n log n)` |
 
-*   **0.2** separates nearly sorted inputs, where linear corrections are sufficient.
-*   **0.5** distinguishes moderately disordered data from highly random distributions.
-*   These thresholds were chosen to balance operation count and algorithmic overhead.
+### Linear strategy (O(n))
 
-The adaptive strategy performs **no sorting itself**; it only selects the appropriate strategy **once**, before any move is executed.
+For nearly sorted inputs, the adaptive strategy uses a **dedicated linear-time algorithm**, distinct from the quadratic `--simple` strategy.  
+This algorithm performs a bounded number of single-pass traversals over stack A, correcting only local inversions using swap and rotation operations, without using stack B.
+
+Because the number of full passes and corrective operations is strictly bounded, the total number of push_swap operations grows linearly with the size of the input.
+
+If the input is detected to be more disordered than expected for linear processing, the adaptive strategy safely falls back to the medium strategy to guarantee correctness.
+
+### Medium and Complex strategies
+
+For moderate disorder, the adaptive strategy selects the chunk-based medium algorithm (`O(n √n)`), optimised for partially unordered inputs.
+
+For highly disordered inputs, it selects the radix-based complex algorithm (`O(n log n)`), designed for large and random datasets.
+
+This adaptive approach ensures both **correctness** and **optimal performance** across a wide range of input configurations while strictly respecting the complexity requirements of the project.
+``
 
 ***
 
