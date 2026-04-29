@@ -1,0 +1,5 @@
+BONUS_SRCS = checker.c
+BONUS_OBJS = $(BONUS_SRCS:.c=.o)
+
+bonus: $(BONUS_OBJS)
+    $(CC) $(CFLAGS) $(BONUS_OBJS) $(OBJS) -o checker
