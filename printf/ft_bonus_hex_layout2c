@@ -17,6 +17,16 @@ static int    get_zprec(t_format *f, int dlen)
     return (zprec);
 }
 
+static int    get_hex_dlen(unsigned long nb, t_format *f)
+{
+    int    dlen;
+
+    dlen = ulen_base(nb, 16);
+    if (f->dot && f->precision == 0 && nb == 0)
+        dlen = 0;
+    return (dlen);
+}
+
 static int    print_hex_body(unsigned long nb, const char *base, int dlen, int zprec)
 {
     int    count;
@@ -37,9 +47,7 @@ int    print_hex_layout(unsigned long nb, const char *base,
     char    padc;
     int        count;
 
-    dlen = ulen_base(nb, 16);
-    if (f->dot && f->precision == 0 && nb == 0)
-        dlen = 0;
+    dlen = get_hex_dlen(nb, f);
     zprec = get_zprec(f, dlen);
     padc = get_padc(f);
     pad = ft_max(0, f->width - pre_len - dlen - zprec);
@@ -51,36 +59,6 @@ int    print_hex_layout(unsigned long nb, const char *base,
     if (!f->minus && padc == '0')
         count += putnchar('0', pad);
     count += print_hex_body(nb, base, dlen, zprec);
-    if (f->minus)
-        count += putnchar(' ', pad);
-    return (count);
-}
-
-int    print_ptr_layout(unsigned long addr, t_format *f)
-{
-    int        dlen;
-    int        zprec;
-    int        pad;
-    char    padc;
-    int        count;
-
-    dlen = 1;
-    if (addr != 0)
-        dlen = ulen_base(addr, 16);
-    zprec = get_zprec(f, dlen);
-    padc = get_padc(f);
-    pad = ft_max(0, f->width - 2 - dlen - zprec);
-    count = 0;
-    if (!f->minus && padc == ' ')
-        count += putnchar(' ', pad);
-    count += putnstr("0x", 2);
-    if (!f->minus && padc == '0')
-        count += putnchar('0', pad);
-    count += putnchar('0', zprec);
-    if (addr == 0)
-        count += put_char_count('0');
-    else
-        count += put_unsigned_base(addr, "0123456789abcdef", 16);
     if (f->minus)
         count += putnchar(' ', pad);
     return (count);
