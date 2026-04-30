@@ -56,3 +56,18 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
+# =======================
+# BONUS
+# =======================
+
+BONUS_SRCS = \
+    ft_printf_bonus_bonus.c \
+    ft_parse_bonus_bonus.c \
+    ft_handle_conversion_bonus_bonus.c
+
+BONUS_OBJS = $(BONUS_SRCS:.c=.o)
+
+bonus: $(LIBFT) $(BONUS_OBJS)
+    cp $(LIBFT) $(NAME)
+    ar rcs $(NAME) $(BONUS_OBJS)
