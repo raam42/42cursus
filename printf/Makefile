@@ -64,6 +64,13 @@ re: fclean all
 BONUS_SRCS = \
     ft_printf_bonus_bonus.c \
     ft_parse_bonus_bonus.c \
+    ft_bonus_utils_bonus.c \
+    ft_bonus_utils2_bonus.c \
+    ft_bonus_print_core_bonus.c \
+    ft_bonus_layout_bonus.c \
+    ft_bonus_print_num_bonus.c \
+    ft_bonus_layout2_bonus.c \
+    ft_bonus_print_hex_ptr_bonus.c \
     ft_handle_conversion_bonus_bonus.c
 
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
