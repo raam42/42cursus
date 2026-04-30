@@ -1,5 +1,17 @@
-#include "push_swap.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_bench.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: roandres <roandres@student.42madrid.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/29 15:20:35 by roandres          #+#    #+#             */
+/*   Updated: 2026/04/29 15:22:18 by roandres         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "push_swap.h"
+/* We only need to check if we already have the fd functions from libft to replace the write */
 static void    put_2digits_fd(int n, int fd)
 {
     char    c;
@@ -28,18 +40,17 @@ static void    print_disorder_pct(t_ctx *ctx)
 
 static void    print_strategy_line(t_ctx *ctx)
 {
-    t_strategy    s;
-
-    s = ctx->b.used_strategy;
     ft_putstr_fd("[bench] strategy: ", 2);
-    if (s == SIMPLE)
+    if (ctx->b.used_strategy == LINEAR)
+        ft_putstr_fd("linear (O(n))\n", 2);
+    else if (ctx->b.used_strategy == SIMPLE)
         ft_putstr_fd("simple (O(n^2))\n", 2);
-    else if (s == MEDIUM)
+    else if (ctx->b.used_strategy == MEDIUM)
         ft_putstr_fd("medium (O(n*sqrt(n)))\n", 2);
-    else if (s == COMPLEX)
+    else if (ctx->b.used_strategy == COMPLEX)
         ft_putstr_fd("complex (O(n*log(n)))\n", 2);
     else
-        ft_putstr_fd("adaptive (resolved)\n", 2);
+        ft_putstr_fd("unresolved\n", 2);
 }
 
 static void    print_counts1(t_ctx *ctx)
