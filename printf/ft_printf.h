@@ -6,7 +6,7 @@
 # include <stdlib.h>
 
 /*
-** libft output helpers (already implemented in libft)
+** libft output helpers
 */
 void    ft_putchar(char c);
 void    ft_putstr(char *s);
@@ -18,7 +18,7 @@ int        ft_strlen(const char *s);
 int        ft_printf(const char *format, ...);
 
 /*
-** Conversion handlers
+** Conversion handlers (mandatory)
 */
 int        ft_print_char(int c);
 int        ft_print_str(char *s);
