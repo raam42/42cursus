@@ -29,5 +29,6 @@ int        parse_format(const char *s, int i, t_format *fmt);
 ** Bonus printing entry point
 */
 int        handle_conversion_bonus(va_list args, t_format *fmt);
+int        ft_printf_bonus(const char *format, ...);
 
 #endif
