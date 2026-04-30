@@ -1,155 +1,87 @@
-_This project has been created as part of the 42 curriculum by rodrigoa._
+*This project has been created as part of the curriculum of 42 by rodrigoa.*
 
 # ft_printf
 
 ## Description
 
-**ft_printf** is a 42 core curriculum project whose goal is to reimplement the standard C library function `printf()`.
+`ft_printf` is a reimplementation of the C standard library function `printf`.
+The goal of this project is to understand variadic functions, formatted output,
+and low-level I/O using `write`.
 
-The project introduces the concept of **variadic functions** in C and requires reproducing the behaviour of `printf()` for a limited and well‑defined set of format specifiers, using only low‑level output functions.
-
-Once completed, `ft_printf` can be integrated into **libft** and reused in future C projects.
-
----
+The project is divided into a mandatory part, which reproduces the basic
+behaviour of `printf`, and an optional bonus part, which extends the formatter
+with flags, width, and precision handling.
 
 ## Instructions
 
 ### Compilation
 
-Requirements:
-- `cc` (or `clang`)
-- `make`
-
-Compile the library:
+To compile the mandatory part:
 
 ```bash
 make
 ````
 
-This builds the static library:
+This will generate the static library:
 
 ```text
 libftprintf.a
 ```
 
-***
+To compile with bonus support:
+
+```bash
+make bonus
+```
 
 ### Usage
 
-To use `ft_printf`, include its header and link the library:
+Include the header and link the library:
 
 ```c
 #include "ft_printf.h"
+
+ft_printf("Hello %s (%d)\n", "world", 42);
 ```
 
-Example:
+The `ft_printf` function returns the number of characters printed, or `-1` on
+error.
 
-```c
-ft_printf("Hello %s, value = %d\n", "world", 42);
-```
+## Algorithm and Design
 
-The function returns the **number of characters printed**, exactly like the standard `printf()`.
+The implementation is based on a format string parser that processes the input
+character by character.
 
-***
+For the mandatory part:
 
-## Project constraints
+*   Each conversion specifier is detected after `%`
+*   A dispatcher function calls the appropriate printer (`%c`, `%s`, `%d`, etc.)
+*   Output is written directly using `write`
 
-The implementation follows the constraints defined in the subject:
+For the bonus part:
 
-*   Only the following functions are allowed:
-    *   `malloc`
-    *   `free`
-    *   `write`
-    *   `va_start`, `va_arg`, `va_copy`, `va_end`
-*   Buffer management from the original `printf()` is **not implemented**
-*   Output is written directly using `write()`
-*   The project is written in **C** and follows the 42 Norm
-*   The output library must be created using `ar` (no `libtool`)
+*   The format is first parsed into a `t_format` structure
+*   Flags, width, precision, and specifier are stored explicitly
+*   Printing is split into small layout functions to respect La Norma limits
+*   Padding, precision, and prefixes are applied in a deterministic order
 
-***
-
-## Implemented conversions (mandatory)
-
-The mandatory part implements the following format specifiers:
-
-| Specifier | Description                                       |
-| --------- | ------------------------------------------------- |
-| `%c`      | print a single character                          |
-| `%s`      | print a string of characters                      |
-| `%p`      | print a pointer address in hexadecimal            |
-| `%d`      | print a signed decimal integer                    |
-| `%i`      | print a signed decimal integer                    |
-| `%u`      | print an unsigned decimal integer                 |
-| `%x`      | print an unsigned hexadecimal integer (lowercase) |
-| `%X`      | print an unsigned hexadecimal integer (uppercase) |
-| `%%`      | print the `%` character                           |
-
-All conversions mirror the behaviour of the standard `printf()` for the supported specifiers.
-
-***
-
-## Design and implementation
-
-The project is structured around a clear separation of responsibilities:
-
-*   `ft_printf.c`  
-    Handles format string parsing and dispatches each conversion.
-*   Conversion helper files  
-    Implement one responsibility each (`char`, `string`, `integer`, `hex`, `pointer`).
-*   All helper functions return the number of characters printed, allowing
-    `ft_printf()` to compute its return value accurately.
-
-This modular design improves readability, maintainability, and extensibility for the bonus part.
-
-***
-
-## Return value behaviour
-
-Like the standard `printf()`, `ft_printf()` returns:
-
-*   the total number of characters printed on success
-*   `-1` in case of an error
-
-Care is taken to count every printed character, including signs, prefixes, and literal text.
-
-***
-
-## Bonus part
-
-The bonus part extends the mandatory implementation with additional formatting features, such as:
-
-*   field width
-*   precision
-*   flags (`-`, `0`, `.`, `#`, `+`, space)
-
-Bonus functionality is implemented in separate files (`*_bonus.c`) as required, and is evaluated **only if the mandatory part is fully correct**.
-
-***
-
-## Project structure
-
-*   `ft_printf.c` — main dispatcher
-*   `ft_print_*.c` — conversion handlers
-*   `ft_printf.h` — public interface
-*   `libft/` — local libft dependency
-*   `Makefile` — compilation rules
-
-***
-
-## Use of Artificial Intelligence
-
-Artificial Intelligence tools were used strictly as a **supporting and learning aid**, in accordance with the project guidelines:
-
-*   to clarify theoretical concepts (variadic functions, formatted output),
-*   to review design decisions and complexity,
-*   to assist with documentation drafting.
-
-All code was written, reviewed, understood, and validated by the author.
-
-***
+The code is structured into small functions and files in order to comply with
+La Norma v4 constraints (maximum number of lines, variables, and functions per
+file).
 
 ## Resources
 
-*   42 ft\_printf subject [\[printf \| PDF\]](https://hasbroinc-my.sharepoint.com/personal/mejiar1_wz_hasbro_com/Documents/Microsoft%20Copilot%20Chat%20Files/printf.pdf?web=1)
-*   C standard documentation on `printf` and variadic functions
-*   Manual pages: `man printf`, `man stdarg`
+*   `man 3 printf`
+*   `man stdarg`
+*   GNU C Library documentation
+
+### AI Usage
+
+AI tools were used as a **learning and verification aid only**, mainly to:
+
+*   review formatting edge cases
+*   double-check compliance with La Norma v4
+*   reason about refactoring strategies when splitting large functions
+
+All final design decisions and implementations were written and reviewed
+manually.
