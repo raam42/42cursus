@@ -1,30 +1,42 @@
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#ifndef FT_PRINTF_BONUS_H
+# define FT_PRINTF_BONUS_H
 
 # include <stdarg.h>
-# include <unistd.h>
-# include <stdlib.h>
+# include "ft_printf.h"
 
 /*
-** libft output helpers
+** Bonus format descriptor
 */
-void    ft_putchar(char c);
-void    ft_putstr(char *s);
-int        ft_strlen(const char *s);
+typedef struct s_format
+{
+    int        minus;
+    int        zero;
+    int        width;
+    int        dot;
+    int        precision;
+    int        hash;
+    int        plus;
+    int        space;
+    char    specifier;
+}    t_format;
 
 /*
-** ft_printf main function
+** Bonus parsing
 */
-int        ft_printf(const char *format, ...);
+void    init_format(t_format *fmt);
+int        parse_format(const char *s, int i, t_format *fmt);
 
 /*
-** Conversion handlers (mandatory)
+** Bonus entry points
 */
-int        ft_print_char(int c);
-int        ft_print_str(char *s);
-int        ft_print_ptr(void *p);
-int        ft_print_int(int n);
-int        ft_print_uint(unsigned int n);
-int        ft_print_hex(unsigned int n, int uppercase);
+int        ft_printf_bonus(const char *format, ...);
+int        handle_conversion_bonus(va_list args, t_format *fmt);
+
+/*
+** Bonus layout (shared)
+*/
+int        print_hex_layout(unsigned long nb, const char *base,
+            const char *pre, int pre_len, t_format *f);
+int        print_ptr_layout(unsigned long addr, t_format *f);
 
 #endif
