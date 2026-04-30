@@ -5,7 +5,7 @@ static char    *read_to_stash(int fd, char *stash)
     char    *buf;
     ssize_t    bytes;
 
-    buf = malloc((size_t)BUFFER_SIZE + 1);
+    buf = malloc(BUFFER_SIZE + 1);
     if (!buf)
         return (free(stash), NULL);
     bytes = 1;
@@ -22,10 +22,7 @@ static char    *read_to_stash(int fd, char *stash)
         {
             stash = ft_strjoin(stash, buf);
             if (!stash)
-            {
-                free(buf);
-                return (NULL);
-            }
+                return (free(buf), NULL);
         }
     }
     free(buf);
@@ -34,8 +31,8 @@ static char    *read_to_stash(int fd, char *stash)
 
 static char    *extract_line(char *stash)
 {
-    size_t    len;
     size_t    i;
+    size_t    len;
 
     if (!stash || !stash[0])
         return (NULL);
