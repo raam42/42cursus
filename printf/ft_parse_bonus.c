@@ -7,7 +7,7 @@ static int    is_digit(char c)
 
 static int    is_flag(char c)
 {
-    return (c == '-' || c == '0' || c == '.' || c == '#'
+    return (c == '-' || c == '0' || c == '#'
         || c == '+' || c == ' ');
 }
 
@@ -55,14 +55,12 @@ static void    apply_flag(t_format *fmt, char c)
         fmt->plus = 1;
     else if (c == ' ')
         fmt->space = 1;
-    else if (c == '.')
-        fmt->dot = 1;
 }
 
 /*
 ** parse_format:
 ** - s: full format string
-** - i: index right AFTER '%' (caller passes i+1)
+** - i: index right AFTER '%' (caller passes i + 1)
 ** - fmt: filled format descriptor
 **
 ** Returns:
@@ -71,7 +69,7 @@ static void    apply_flag(t_format *fmt, char c)
 */
 int    parse_format(const char *s, int i, t_format *fmt)
 {
-    while (s[i] && is_flag(s[i]) && !is_digit(s[i]))
+    while (s[i] && is_flag(s[i]))
     {
         apply_flag(fmt, s[i]);
         i++;
