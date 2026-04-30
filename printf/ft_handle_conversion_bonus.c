@@ -7,16 +7,19 @@ static int    ft_max(int a, int b)
     return (b);
 }
 
+static int    put_char_count(char c)
+{
+    ft_putchar(c);
+    return (1);
+}
+
 static int    putnchar(char c, int n)
 {
     int    count;
 
     count = 0;
     while (n-- > 0)
-    {
-        ft_putchar(c);
-        count++;
-    }
+        count += put_char_count(c);
     return (count);
 }
 
@@ -27,10 +30,23 @@ static int    putnstr(const char *s, int n)
     count = 0;
     while (s && *s && n-- > 0)
     {
-        ft_putchar(*s++);
-        count++;
+        count += put_char_count(*s);
+        s++;
     }
     return (count);
+}
+
+static int    dec_len_unsigned(unsigned long n)
+{
+    int    len;
+
+    len = 1;
+    while (n >= 10)
+    {
+        n /= 10;
+        len++;
+    }
+    return (len);
 }
 
 static int    ulen_base(unsigned long n, int base)
@@ -46,26 +62,26 @@ static int    ulen_base(unsigned long n, int base)
     return (len);
 }
 
-static int    put_unsigned_base(unsigned long n, const char *base)
+static int    put_dec_unsigned(unsigned long n)
 {
     int    count;
 
     count = 0;
-    if (n >= 16)
-        count += put_unsigned_base(n / 16, base);
-    ft_putchar(base[n % 16]);
-    return (count + 1);
+    if (n >= 10)
+        count += put_dec_unsigned(n / 10);
+    count += put_char_count((char)('0' + (n % 10)));
+    return (count);
 }
 
-static int    put_unsigned_base_b(unsigned long n, const char *base, int b)
+static int    put_unsigned_base(unsigned long n, const char *base, int b)
 {
     int    count;
 
     count = 0;
     if (n >= (unsigned long)b)
-        count += put_unsigned_base_b(n / (unsigned long)b, base, b);
-    ft_putchar(base[n % (unsigned long)b]);
-    return (count + 1);
+        count += put_unsigned_base(n / (unsigned long)b, base, b);
+    count += put_char_count(base[n % (unsigned long)b]);
+    return (count);
 }
 
 /* ----------------------------- %c and %% ----------------------------- */
@@ -76,13 +92,12 @@ static int    print_char_bonus(int c, t_format *f)
     int    count;
 
     pad = 0;
-    count = 0;
     if (f->width > 1)
         pad = f->width - 1;
+    count = 0;
     if (!f->minus)
         count += putnchar(' ', pad);
-    ft_putchar((char)c);
-    count++;
+    count += put_char_count((char)c);
     if (f->minus)
         count += putnchar(' ', pad);
     return (count);
@@ -115,95 +130,51 @@ static int    print_str_bonus(char *s, t_format *f)
     return (count);
 }
 
-/* -------------------------- numbers helpers --------------------------- */
-
-static int    print_sign_prefix(char sign, const char *pre, int pre_len)
-{
-    int    count;
-
-    count = 0;
-    if (sign)
-    {
-        ft_putchar(sign);
-        count++;
-    }
-    if (pre && pre_len > 0)
-        count += putnstr(pre, pre_len);
-    return (count);
-}
-
-static int    print_dec_digits(long n)
-{
-    int    count;
-
-    count = 0;
-    if (n >= 10)
-        count += print_dec_digits(n / 10);
-    ft_putchar((char)('0' + (n % 10)));
-    return (count + 1);
-}
-
-static int    dec_len_unsigned(unsigned long n)
-{
-    int    len;
-
-    len = 1;
-    while (n >= 10)
-    {
-        n /= 10;
-        len++;
-    }
-    return (len);
-}
-
 /* ------------------------------ %d/%i -------------------------------- */
+
+static char    get_int_sign(long nb, t_format *f)
+{
+    if (nb < 0)
+        return ('-');
+    if (f->plus)
+        return ('+');
+    if (f->space)
+        return (' ');
+    return (0);
+}
 
 static int    print_int_bonus(int n, t_format *f)
 {
-    long    nb;
-    char    sign;
-    int        dlen;
-    int        zprec;
-    int        pad;
-    char    padc;
-    int        count;
+    long            nb;
+    unsigned long    absn;
+    char            sign;
+    int                dlen;
+    int                zprec;
+    int                pad;
+    char            padc;
+    int                count;
 
     nb = (long)n;
-    sign = 0;
-    if (nb < 0)
-        sign = '-';
-    else if (f->plus)
-        sign = '+';
-    else if (f->space)
-        sign = ' ';
-    if (nb < 0)
-        nb = -nb;
-    dlen = dec_len_unsigned((unsigned long)nb);
-    if (f->dot && f->precision == 0 && nb == 0)
+    sign = get_int_sign(nb, f);
+    absn = (unsigned long)(nb < 0 ? -nb : nb);
+    dlen = dec_len_unsigned(absn);
+    if (f->dot && f->precision == 0 && absn == 0)
         dlen = 0;
-    zprec = 0;
-    if (f->dot)
-        zprec = ft_max(0, f->precision - dlen);
+    zprec = (f->dot) * ft_max(0, f->precision - dlen);
     padc = ' ';
     if (f->zero && !f->minus && !f->dot)
         padc = '0';
-    pad = 0;
-    if (f->width > (dlen + zprec + (sign != 0)))
-        pad = f->width - (dlen + zprec + (sign != 0));
+    pad = ft_max(0, f->width - dlen - zprec - (sign != 0));
     count = 0;
     if (!f->minus && padc == ' ')
         count += putnchar(' ', pad);
-    if (padc == '0')
-    {
-        if (sign)
-            count += print_sign_prefix(sign, NULL, 0);
+    if (sign)
+        count += put_char_count(sign);
+    if (!f->minus && padc == '0')
         count += putnchar('0', pad);
-    }
-    else
-        count += print_sign_prefix(sign, NULL, 0);
     count += putnchar('0', zprec);
     if (dlen > 0)
-        count += print_dec_digits(nb);
+        count += put_dec_unsigned(absn);
     if (f->minus)
         count += putnchar(' ', pad);
     return (count);
@@ -224,29 +195,44 @@ static int    print_uint_bonus(unsigned int n, t_format *f)
     dlen = dec_len_unsigned(nb);
     if (f->dot && f->precision == 0 && nb == 0)
         dlen = 0;
-    zprec = 0;
-    if (f->dot)
-        zprec = ft_max(0, f->precision - dlen);
+    zprec = (f->dot) * ft_max(0, f->precision - dlen);
     padc = ' ';
     if (f->zero && !f->minus && !f->dot)
         padc = '0';
-    pad = 0;
-    if (f->width > (dlen + zprec))
-        pad = f->width - (dlen + zprec);
+    pad = ft_max(0, f->width - dlen - zprec);
     count = 0;
     if (!f->minus && padc == ' ')
         count += putnchar(' ', pad);
-    if (padc == '0')
+    if (!f->minus && padc == '0')
         count += putnchar('0', pad);
     count += putnchar('0', zprec);
     if (dlen > 0)
-        count += print_dec_digits((long)nb);
+        count += put_dec_unsigned(nb);
     if (f->minus)
         count += putnchar(' ', pad);
     return (count);
 }
 
 /* --------------------------- %x / %X --------------------------------- */
+
+static void    hex_prefix(unsigned long nb, t_format *f, int upper,
+        const char **pre, int *pre_len)
+{
+    *pre = NULL;
+    *pre_len = 0;
+    if (!f->hash || nb == 0)
+        return ;
+    if (upper)
+    {
+        *pre = "0X";
+        *pre_len = 2;
+    }
+    else
+    {
+        *pre = "0x";
+        *pre_len = 2;
+    }
+}
 
 static int    print_hex_bonus(unsigned int n, t_format *f, int upper)
 {
@@ -264,33 +250,25 @@ static int    print_hex_bonus(unsigned int n, t_format *f, int upper)
     if (upper)
         base = "0123456789ABCDEF";
     nb = (unsigned long)n;
-    pre = NULL;
-    pre_len = 0;
-    if (f->hash && nb != 0 && upper)
-        (pre = "0X", pre_len = 2);
-    else if (f->hash && nb != 0 && !upper)
-        (pre = "0x", pre_len = 2);
+    hex_prefix(nb, f, upper, &pre, &pre_len);
     dlen = ulen_base(nb, 16);
     if (f->dot && f->precision == 0 && nb == 0)
         dlen = 0;
-    zprec = 0;
-    if (f->dot)
-        zprec = ft_max(0, f->precision - dlen);
+    zprec = (f->dot) * ft_max(0, f->precision - dlen);
     padc = ' ';
     if (f->zero && !f->minus && !f->dot)
         padc = '0';
-    pad = 0;
-    if (f->width > (pre_len + dlen + zprec))
-        pad = f->width - (pre_len + dlen + zprec);
+    pad = ft_max(0, f->width - pre_len - dlen - zprec);
     count = 0;
     if (!f->minus && padc == ' ')
         count += putnchar(' ', pad);
-    count += print_sign_prefix(0, pre, pre_len);
-    if (padc == '0')
+    if (pre_len)
+        count += putnstr(pre, pre_len);
+    if (!f->minus && padc == '0')
         count += putnchar('0', pad);
     count += putnchar('0', zprec);
     if (dlen > 0)
-        count += put_unsigned_base_b(nb, base, 16);
+        count += put_unsigned_base(nb, base, 16);
     if (f->minus)
         count += putnchar(' ', pad);
     return (count);
@@ -308,27 +286,26 @@ static int    print_ptr_bonus(void *p, t_format *f)
     int                count;
 
     addr = (unsigned long)p;
-    dlen = ulen_base(addr, 16);
-    if (f->dot && f->precision == 0 && addr == 0)
-        dlen = 0;
-    zprec = 0;
-    if (f->dot)
-        zprec = ft_max(0, f->precision - dlen);
+    if (addr == 0)
+        dlen = 1;
+    else
+        dlen = ulen_base(addr, 16);
+    zprec = (f->dot) * ft_max(0, f->precision - dlen);
     padc = ' ';
     if (f->zero && !f->minus && !f->dot)
         padc = '0';
-    pad = 0;
-    if (f->width > (2 + dlen + zprec))
-        pad = f->width - (2 + dlen + zprec);
+    pad = ft_max(0, f->width - 2 - dlen - zprec);
     count = 0;
     if (!f->minus && padc == ' ')
         count += putnchar(' ', pad);
     count += putnstr("0x", 2);
-    if (padc == '0')
+    if (!f->minus && padc == '0')
         count += putnchar('0', pad);
     count += putnchar('0', zprec);
-    if (dlen > 0)
-        count += put_unsigned_base_b(addr, "0123456789abcdef", 16);
+    if (addr == 0)
+        count += put_char_count('0');
+    else
+        count += put_unsigned_base(addr, "0123456789abcdef", 16);
     if (f->minus)
         count += putnchar(' ', pad);
     return (count);
