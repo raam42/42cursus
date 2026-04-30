@@ -4,19 +4,19 @@ static int    handle_conversion(char specifier, va_list args)
 {
     if (specifier == 'c')
         return (ft_print_char(va_arg(args, int)));
-    else if (specifier == 's')
+    if (specifier == 's')
         return (ft_print_str(va_arg(args, char *)));
-    else if (specifier == 'p')
+    if (specifier == 'p')
         return (ft_print_ptr(va_arg(args, void *)));
-    else if (specifier == 'd' || specifier == 'i')
+    if (specifier == 'd' || specifier == 'i')
         return (ft_print_int(va_arg(args, int)));
-    else if (specifier == 'u')
+    if (specifier == 'u')
         return (ft_print_uint(va_arg(args, unsigned int)));
-    else if (specifier == 'x')
+    if (specifier == 'x')
         return (ft_print_hex(va_arg(args, unsigned int), 0));
-    else if (specifier == 'X')
+    if (specifier == 'X')
         return (ft_print_hex(va_arg(args, unsigned int), 1));
-    else if (specifier == '%')
+    if (specifier == '%')
         return (ft_print_char('%'));
     return (0);
 }
