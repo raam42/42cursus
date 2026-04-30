@@ -56,19 +56,6 @@ int    print_hex_layout(unsigned long nb, const char *base,
     return (count);
 }
 
-static int    print_ptr_body(unsigned long addr, int zprec)
-{
-    int    count;
-
-    count = 0;
-    count += putnchar('0', zprec);
-    if (addr == 0)
-        count += put_char_count('0');
-    else
-        count += put_unsigned_base(addr, "0123456789abcdef", 16);
-    return (count);
-}
-
 int    print_ptr_layout(unsigned long addr, t_format *f)
 {
     int        dlen;
@@ -89,7 +76,11 @@ int    print_ptr_layout(unsigned long addr, t_format *f)
     count += putnstr("0x", 2);
     if (!f->minus && padc == '0')
         count += putnchar('0', pad);
-    count += print_ptr_body(addr, zprec);
+    count += putnchar('0', zprec);
+    if (addr == 0)
+        count += put_char_count('0');
+    else
+        count += put_unsigned_base(addr, "0123456789abcdef", 16);
     if (f->minus)
         count += putnchar(' ', pad);
     return (count);
