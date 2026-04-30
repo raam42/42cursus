@@ -1,9 +1,9 @@
 #include "ft_printf_bonus.h"
 
-int    ft_printf(const char *format, ...)
+int    ft_printf_bonus(const char *format, ...)
 {
     va_list        args;
-    t_format        fmt;
+    t_format    fmt;
     int            total;
     int            i;
     int            j;
