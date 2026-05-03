@@ -1,11 +1,11 @@
 NAME = get_next_line.a
-
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+HEADER = get_next_line.h
 
 SRCS = \
     get_next_line.c \
-    get_next_line_utils.c
+    gnl_utils.c
 
 OBJS = $(SRCS:.c=.o)
 
