@@ -1,3 +1,5 @@
+#include "ft_printf_bonus.h"
+
 int    print_char_bonus(int c, t_format *f)
 {
     int    pad;
