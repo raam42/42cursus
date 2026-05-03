@@ -65,19 +65,19 @@ static char    *stash_after_line(char *stash)
 
 char    *get_next_line(int fd)
 {
-    static char    *stash;
+    static char    *stash[1024];
     char        *line;
 
-    if (fd < 0 || BUFFER_SIZE <= 0)
+    if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
         return (NULL);
     if (read(fd, 0, 0) < 0)
-        return (free(stash), stash = NULL, NULL);
-    stash = read_to_stash(fd, stash);
-    if (!stash)
+        return (free(stash[fd]), stash[fd] = NULL, NULL);
+    stash[fd] = read_to_stash(fd, stash[fd]);
+    if (!stash[fd])
         return (NULL);
-    line = extract_line(stash);
+    line = extract_line(stash[fd]);
     if (!line)
-        return (free(stash), stash = NULL, NULL);
-    stash = stash_after_line(stash);
+        return (free(stash[fd]), stash[fd] = NULL, NULL);
+    stash[fd] = stash_after_line(stash[fd]);
     return (line);
 }
