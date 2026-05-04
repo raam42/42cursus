@@ -1,11 +1,7 @@
 NAME = libftprintf.a
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-
-# =======================
-# MANDATORY SOURCES
-# =======================
+CFLAGS = -Wall -Wextra -Werror -I.
 
 SRCS = \
 	ft_printf.c \
@@ -17,10 +13,6 @@ SRCS = \
 	ft_print_ptr.c
 
 OBJS = $(SRCS:.c=.o)
-
-# =======================
-# BONUS SOURCES
-# =======================
 
 BONUS_SRCS = \
 	ft_printf_bonus.c \
@@ -37,22 +29,21 @@ BONUS_SRCS = \
 
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
-# =======================
-# RULES
-# =======================
-
 all: $(NAME)
 
 $(NAME): $(OBJS) $(BONUS_OBJS)
-	ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+	@ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
 
 bonus: $(NAME)
 
+.c.o:
+	@$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	rm -f $(OBJS) $(BONUS_OBJS)
+	@rm -f $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

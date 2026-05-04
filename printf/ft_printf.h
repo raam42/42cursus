@@ -4,6 +4,7 @@
 # include <stddef.h>
 # include <stdarg.h>
 # include <unistd.h>
+# include "libft.h"
 
 int	ft_printf(const char *format, ...);
 
@@ -16,6 +17,5 @@ int	ft_print_ptr(void *p);
 
 void	ft_putchar(char c);
 void	ft_putstr(char *s);
-size_t	ft_strlen(const char *s);
 
 #endif
