@@ -21,8 +21,7 @@ int	ft_printf(const char *format, ...)
 			j = parse_format(format, i + 1, &fmt);
 			if (j < 0)
 			{
-				ft_putchar_fd('%', 1);
-				total++;
+				total += put_char_count('%');
 				i++;
 				continue ;
 			}
@@ -31,8 +30,7 @@ int	ft_printf(const char *format, ...)
 		}
 		else
 		{
-			ft_putchar_fd(format[i], 1);
-			total++;
+			total += put_char_count(format[i]);
 			i++;
 		}
 	}

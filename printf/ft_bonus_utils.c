@@ -9,8 +9,7 @@ int	ft_max(int a, int b)
 
 int	put_char_count(char c)
 {
-	ft_putchar_fd(c, 1);
-	return (1);
+	return (write(1, &c, 1));
 }
 
 int	putnchar(char c, int n)

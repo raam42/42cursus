@@ -40,7 +40,10 @@ char    *ft_strjoin(char *s1, char *s2)
         return (NULL);
     res = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
     if (!res)
+    {
+        free(s1);
         return (NULL);
+    }
     i = 0;
     j = 0;
     while (s1 && s1[i])
@@ -66,7 +69,7 @@ char    *ft_substr(char *s, unsigned int start, size_t len)
     s_len = ft_strlen(s);
     if (start >= s_len)
         len = 0;
-    if (len > s_len - start)
+    else if (len > s_len - start)
         len = s_len - start;
     sub = malloc(len + 1);
     if (!sub)

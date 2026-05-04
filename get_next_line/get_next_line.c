@@ -9,7 +9,7 @@ static char    *read_to_stash(int fd, char *stash)
     if (!buf)
         return (free(stash), NULL);
     bytes = 1;
-    while (!ft_strchr(stash, '\n') && bytes > 0)
+    while ((!stash || !ft_strchr(stash, '\n')) && bytes > 0)
     {
         bytes = read(fd, buf, BUFFER_SIZE);
         if (bytes < 0)
@@ -54,7 +54,7 @@ static char    *stash_after_line(char *stash)
     i = 0;
     while (stash[i] && stash[i] != '\n')
         i++;
-    if (!stash[i])
+    if (!stash[i] || !stash[i + 1])
         return (free(stash), NULL);
     i++;
     len = ft_strlen(stash + i);
@@ -70,8 +70,6 @@ char    *get_next_line(int fd)
 
     if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0)
         return (NULL);
-    if (read(fd, 0, 0) < 0)
-        return (free(stash[fd]), stash[fd] = NULL, NULL);
     stash[fd] = read_to_stash(fd, stash[fd]);
     if (!stash[fd])
         return (NULL);
