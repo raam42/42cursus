@@ -2,6 +2,8 @@
 
 # ft_printf
 
+***
+
 ## Description
 
 `ft_printf` is a reimplementation of the C standard library function `printf`.
@@ -12,7 +14,9 @@ The project is divided into a mandatory part, which reproduces the basic
 behaviour of `printf`, and an optional bonus part, which extends the formatter
 with flags, width, and precision handling.
 
-## ✅ Supported Conversions & Flags
+***
+
+## Supported Conversions & Flags
 
 **Conversions:**
 *   `%c` : Prints a single character.
@@ -26,6 +30,8 @@ with flags, width, and precision handling.
 **Bonus Flags Supported:**
 *   Field width and precision (`.`).
 *   Formatting flags: `-`, `0`, `#`, ` ` (space), and `+`.
+
+***
 
 ## Instructions
 
