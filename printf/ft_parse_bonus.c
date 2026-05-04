@@ -12,19 +12,6 @@ static int	is_specifier(char c)
 		|| c == 'u' || c == 'x' || c == 'X' || c == '%');
 }
 
-static int	parse_number(const char *s, int i)
-{
-	int	n;
-
-	n = 0;
-	while (ft_isdigit(s[i]))
-	{
-		n = n * 10 + (s[i] - '0');
-		i++;
-	}
-	return (n);
-}
-
 void	init_format(t_format *fmt)
 {
 	fmt->minus = 0;
@@ -61,7 +48,7 @@ int	parse_format(const char *s, int i, t_format *fmt)
 	}
 	if (ft_isdigit(s[i]))
 	{
-		fmt->width = parse_number(s, i);
+		fmt->width = ft_atoi(&s[i]);
 		while (ft_isdigit(s[i]))
 			i++;
 	}
@@ -71,7 +58,7 @@ int	parse_format(const char *s, int i, t_format *fmt)
 		i++;
 		if (ft_isdigit(s[i]))
 		{
-			fmt->precision = parse_number(s, i);
+			fmt->precision = ft_atoi(&s[i]);
 			while (ft_isdigit(s[i]))
 				i++;
 		}
