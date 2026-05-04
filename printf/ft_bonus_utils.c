@@ -1,50 +1,47 @@
 #include "ft_printf_bonus.h"
 
-int    ft_max(int a, int b)
+int	ft_max(int a, int b)
 {
-    if (a > b)
-        return (a);
-    return (b);
+	if (a > b)
+		return (a);
+	return (b);
 }
 
-int    put_char_count(char c)
+int	put_char_count(char c)
 {
-    ft_putchar(c);
-    return (1);
+	ft_putchar_fd(c, 1);
+	return (1);
 }
 
-int    putnchar(char c, int n)
+int	putnchar(char c, int n)
 {
-    int    count;
+	int	count;
 
-    count = 0;
-    while (n-- > 0)
-        count += put_char_count(c);
-    return (count);
+	count = 0;
+	while (n-- > 0)
+		count += put_char_count(c);
+	return (count);
 }
 
-int    putnstr(const char *s, int n)
+int	putnstr(const char *s, int n)
 {
-    int    count;
+	int	count;
 
-    count = 0;
-    while (s && *s && n-- > 0)
-    {
-        count += put_char_count(*s);
-        s++;
-    }
-    return (count);
+	count = 0;
+	while (s && *s && n-- > 0)
+		count += put_char_count(*s++);
+	return (count);
 }
 
-int    dec_len_unsigned(unsigned long n)
+int	dec_len_unsigned(unsigned long n)
 {
-    int    len;
+	int	len;
 
-    len = 1;
-    while (n >= 10)
-    {
-        n /= 10;
-        len++;
-    }
-    return (len);
+	len = 1;
+	while (n >= 10)
+	{
+		n /= 10;
+		len++;
+	}
+	return (len);
 }
