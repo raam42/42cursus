@@ -1,0 +1,4 @@
+*.o
+*.a
+printf/libft.h
+printf/tests/
