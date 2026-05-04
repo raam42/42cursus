@@ -12,6 +12,21 @@ The project is divided into a mandatory part, which reproduces the basic
 behaviour of `printf`, and an optional bonus part, which extends the formatter
 with flags, width, and precision handling.
 
+## ✅ Supported Conversions & Flags
+
+**Conversions:**
+*   `%c` : Prints a single character.
+*   `%s` : Prints a string.
+*   `%p` : Prints a `void *` pointer argument in hexadecimal format.
+*   `%d` / `%i` : Prints a decimal (base 10) number.
+*   `%u` : Prints an unsigned decimal (base 10) number.
+*   `%x` / `%X` : Prints a number in hexadecimal (base 16) lowercase format / uppercase format.
+*   `%%` : Prints a percent sign.
+
+**Bonus Flags Supported:**
+*   Field width and precision (`.`).
+*   Formatting flags: `-`, `0`, `#`, ` ` (space), and `+`.
+
 ## Instructions
 
 ### Compilation

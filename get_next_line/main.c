@@ -4,38 +4,51 @@
 
 int main(int argc, char **argv)
 {
-    int     fd;
+    int     fds[1024];
     char    *line;
-    int     line_count;
+    int     i;
+    int     files_left;
 
-    line_count = 1;
     if (argc == 1)
     {
         printf("Reading from standard input (Type text, Ctrl+D to stop):\n");
-        fd = 0;
-    }
-    else if (argc == 2)
-    {
-        fd = open(argv[1], O_RDONLY);
-        if (fd < 0)
+        while ((line = get_next_line(0)) != NULL)
         {
-            perror("Error opening file");
-            return (1);
+            printf("%s", line);
+            free(line);
         }
-        printf("Reading from file: %s\n", argv[1]);
+        return (0);
     }
-    else
+    files_left = 0;
+    for (i = 1; i < argc; i++)
     {
-        printf("Usage: %s [filename]\n", argv[0]);
-        return (1);
+        fds[i] = open(argv[i], O_RDONLY);
+        if (fds[i] < 0)
+            perror(argv[i]);
+        else
+            files_left++;
     }
 
-    while ((line = get_next_line(fd)) != NULL)
+    while (files_left > 0)
     {
-        printf("Line %d: %s", line_count++, line);
-        free(line);
+        for (i = 1; i < argc; i++)
+        {
+            if (fds[i] >= 0)
+            {
+                line = get_next_line(fds[i]);
+                if (line)
+                {
+                    printf("File %d (%s): %s", i, argv[i], line);
+                    free(line);
+                }
+                else
+                {
+                    close(fds[i]);
+                    fds[i] = -1;
+                    files_left--;
+                }
+            }
+        }
     }
-    if (fd != 0)
-        close(fd);
     return (0);
 }
