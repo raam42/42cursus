@@ -5,7 +5,6 @@ int	ft_printf(const char *format, ...)
 	va_list	args;
 	t_format	fmt;
 	int	total;
-	int	temp;
 	int	i;
 	int	j;
 
@@ -24,25 +23,25 @@ int	ft_printf(const char *format, ...)
 			j = parse_format(format, i + 1, &fmt);
 			if (j < 0)
 			{
-				temp = put_char_count('%');
-				if (temp < 0)
+				j = put_char_count('%');
+				if (j < 0)
 					return (va_end(args), -1);
-				total += temp;
+				total += j;
 				i++;
 				continue ;
 			}
-			temp = handle_conversion_bonus(args, &fmt);
-			if (temp < 0)
-				return (va_end(args), -1);
-			total += temp;
 			i = j + 1;
+			j = handle_conversion_bonus(args, &fmt);
+			if (j < 0)
+				return (va_end(args), -1);
+			total += j;
 		}
 		else
 		{
-			temp = put_char_count(format[i]);
-			if (temp < 0)
+			j = put_char_count(format[i]);
+			if (j < 0)
 				return (va_end(args), -1);
-			total += temp;
+			total += j;
 			i++;
 		}
 	}
