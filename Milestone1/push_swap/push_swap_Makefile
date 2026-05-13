@@ -1,0 +1,67 @@
+NAME = push_swap
+BONUS_NAME = checker
+CC = cc
+INC_FOLDER = inc
+
+FLAGS = -Wall -Werror -Wextra
+
+LIBFT_DIR = Libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
+INC_FLAGS = -I $(INC_FOLDER) -I $(LIBFT_DIR)
+
+SRC = src/main.c \
+src/disorder.c \
+src/flags.c \
+src/index.c \
+src/parser.c \
+src/print_bench.c \
+src/strategy.c \
+src/moves/pushing.c \
+src/moves/rotating.c \
+src/moves/rrotating.c \
+src/moves/swapping.c \
+utils/complex_sort.c \
+utils/medium_sort.c \
+utils/simple_sort.c \
+utils/frees.c \
+utils/ft_safe_atoi.c \
+utils/stack_mngr.c \
+utils/linear_sort.c
+
+OBJ = $(SRC:.c=.o)
+
+BONUS_SRC = checker.c
+BONUS_OBJ = $(BONUS_SRC:.c=.o)
+
+GNL_SRC = gnl/get_next_line.c
+GNL_OBJ = $(GNL_SRC:.c=.o)
+
+MAIN_OBJ = src/main.o
+BONUS_OBJS = $(filter-out $(MAIN_OBJ),$(OBJ))
+
+all : $(NAME)
+
+$(LIBFT):
+	@make -C $(LIBFT_DIR)
+
+$(NAME) : $(OBJ) $(LIBFT)
+	$(CC) $(INC_FLAGS) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+
+bonus : $(LIBFT) $(BONUS_OBJS) $(GNL_OBJ) $(BONUS_OBJ)
+	$(CC) $(INC_FLAGS) $(FLAGS) $(BONUS_OBJS) $(GNL_OBJ) $(BONUS_OBJ) $(LIBFT) -o $(BONUS_NAME)
+
+%.o: %.c
+	$(CC) $(INC_FLAGS) $(FLAGS) -c $< -o $@
+
+clean :
+	@make clean -C $(LIBFT_DIR)
+	rm -f $(OBJ) $(BONUS_OBJ) $(GNL_OBJ)
+
+fclean : clean
+	@make fclean -C $(LIBFT_DIR)
+	rm -f $(NAME) $(BONUS_NAME)
+
+re : fclean all
+
+.PHONY : all clean fclean re bonus
