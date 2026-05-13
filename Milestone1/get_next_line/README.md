@@ -109,3 +109,82 @@ make re
     *   `malloc`
     *   `free`
 *   No `libft` functions are used.
+
+***
+
+## 🧪 Testing
+
+You can test the function using a simple `main.c` program. Here is an example that reads from a file named `text.txt` and prints each line clearly enclosed in brackets to visualize where the line cuts occur:
+
+```c
+#include "get_next_line.h"
+#include <stdio.h>
+#include <fcntl.h>
+
+int main(void)
+{
+    int i;
+    char *line;
+
+    i = open("text.txt", O_RDONLY);
+    while ((line = get_next_line(i)) != NULL)
+    {
+        printf("GNL returned: [%s]\n", line);
+        free(line);
+    }
+    close(i);
+    return (0);
+}
+```
+
+***
+
+## 🌟 Testing the Bonus
+
+The bonus part of this project requires `get_next_line` to handle multiple file descriptors simultaneously, using only **one static variable**, without losing the reading state of any of them.
+
+To verify this behavior, you can alternate reading from multiple file descriptors in a single run. By opening different files (`text.txt`, `text1.txt`, and `text2.txt`), you get distinct file descriptors, each with its own independent read offset. Notice the `while` loops at the end; these are used to drain the remaining lines and cleanly free the static variables to prevent memory leaks!
+
+```c
+#include "get_next_line_bonus.h"
+#include <stdio.h>
+#include <fcntl.h>
+
+int main(void)
+{
+    int fd1, fd2, fd3;
+    char *line;
+
+    fd1 = open("text.txt", O_RDONLY);
+    fd2 = open("text1.txt", O_RDONLY);
+    fd3 = open("text2.txt", O_RDONLY);
+
+    line = get_next_line(fd1);
+    printf("FD1: [%s]\n", line);
+    free(line);
+
+    line = get_next_line(fd2);
+    printf("FD2: [%s]\n", line);
+    free(line);
+
+    line = get_next_line(fd3);
+    printf("FD3: [%s]\n", line);
+    free(line);
+
+    line = get_next_line(fd1);
+    printf("FD1 next line: [%s]\n", line);
+    free(line);
+
+    while ((line = get_next_line(fd1)) != NULL)
+        free(line);
+    while ((line = get_next_line(fd2)) != NULL)
+        free(line);
+    while ((line = get_next_line(fd3)) != NULL)
+        free(line);
+
+    close(fd1);
+    close(fd2);
+    close(fd3);
+    return (0);
+}
+```
