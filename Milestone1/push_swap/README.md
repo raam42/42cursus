@@ -1,4 +1,4 @@
-_This project has been created as part of the 42 curriculum by roandres, rodrigoa._
+_This project has been created as part of the 42 curriculum by roandres and rodrigoa._
 
 # push_swap
 
@@ -134,7 +134,7 @@ This metric is used by the adaptive strategy and is also displayed in benchmark 
 **Implementation idea:** selection‑like approach (extract min/max by rotations and pushes).  
 **Flag:** `--simple`
 
-This quadratic strategy is executed **only when explicitly selected** and is **not used by the adaptive strategy**.
+This quadratic strategy is executed when explicitly selected (`--simple`) and is also used by the adaptive strategy in the low-disorder band (disorder < 0.2) to guarantee correctness.
 
 ***
 
@@ -154,30 +154,27 @@ This quadratic strategy is executed **only when explicitly selected** and is **n
 
 ***
 
-#### Strategy 4 — Adaptive (custom)
+##### Strategy 4 — Adaptive (custom)
 
 **Flag:** `--adaptive` (default)
 
 The adaptive strategy selects an internal algorithm depending on the disorder index:
 
-*   **Low disorder:** disorder < 0.2 → uses a dedicated **Linear strategy (O(n))**
-*   **Medium disorder:** 0.2 ≤ disorder < 0.5 → uses the Medium strategy
-*   **High disorder:** disorder ≥ 0.5 → uses the Complex strategy
+* **Low disorder:** disorder < 0.2 → uses the Simple strategy (O(n²))
+* **Medium disorder:** 0.2 ≤ disorder < 0.5 → uses the Medium strategy (O(n√n))
+* **High disorder:** disorder ≥ 0.5 → uses the Complex strategy (O(n log n))
 
-##### Linear strategy (O(n))
+##### Note on the subject specification (erratum / interpretation)
 
-For nearly sorted inputs, the adaptive strategy uses a dedicated **linear‑time algorithm**, distinct from the quadratic `--simple` strategy.
+The subject states that the low-disorder range (disorder < 0.2) should use an **O(n)** method.  
+After testing and analysis, we concluded that using only the inversion-based disorder index as a trigger for a guaranteed linear-time sorting method is not coherent in the push_swap operation model: there are many inputs with disorder < 0.2 that are not “locally nearly sorted” and therefore cannot be reliably sorted in a bounded linear number of push_swap operations without either failing or requiring a superlinear fallback.
 
-This algorithm performs a bounded number of single‑pass traversals over stack **a**, correcting only local inversions using swap and rotation operations. Stack **b** is not used in this case.
-
-Because both the number of passes and corrective operations are strictly bounded, the total number of push\_swap operations grows linearly with respect to the input size.
-
-If the input is found to be more disordered than expected for linear processing, the adaptive strategy safely falls back to the Medium strategy to guarantee correctness.
+For this reason, we interpret the requirement as a guideline for “nearly sorted” cases, and we use the **Simple strategy** as a correct and deterministic baseline in the low-disorder band to ensure correctness for all inputs.
 
 ##### Threshold justification
 
-*   0.2 and 0.5 were selected to separate inputs that are nearly sorted, partially disordered, and highly disordered.
-*   These values were validated through benchmarking random and partially sorted distributions.
+* 0.2 and 0.5 were selected to separate inputs that are nearly sorted, partially disordered, and highly disordered.
+* These values were validated through benchmarking random and partially sorted distributions.
 
 ***
 
@@ -205,6 +202,28 @@ This mode does not change the operations emitted on stdout, so the output can st
 
 ***
 
+---
+### Task distribution (fill in)
+
+**roandres**
+- Parsing & input validation (duplicates, INT range, flags)
+- Stack / node utilities (creation, indexing, helpers)
+- Simple strategy (O(n²))
+- Medium strategy (O(n√n))
+- Benchmark mode output (`--bench`)
+- Documentation (README)
+
+**rodrigoa**
+- Stack / node utilities (creation, indexing, helpers)
+- Operation primitives (sa/sb/pa/pb/ra/rra/…)
+- Complex strategy (O(_n_ log _n_))
+- Adaptive strategy & thresholds
+- Benchmark mode output (`--bench`)
+
+### Joint work
+- Pair debugging sessions, code reviews, and final integration were performed together.
+- Both members understand and can explain all parts of the final solution.
+
 ### Resources
 
 #### References
@@ -223,7 +242,3 @@ Artificial Intelligence was used strictly as a **supporting and learning tool** 
 *   assist with documentation drafting.
 
 All final code was reviewed, understood, and validated by both team members.
-*   42 push\_swap subject
-*   Algorithm complexity analysis (Big‑O)
-*   Chunk‑based sorting strategies
-*   Radix sorting on constrained models

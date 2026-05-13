@@ -6,11 +6,20 @@
 /*   By: roandres <roandres@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:56:03 by roandres          #+#    #+#             */
-/*   Updated: 2026/04/27 19:28:53 by roandres         ###   ########.fr       */
+/*   Updated: 2026/05/02 17:35:35 by roandres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static void	set_bench_strategy(t_ctx *ctx, t_strategy mode, t_strategy comp)
+{
+	if (ctx && ctx->bench)
+	{
+		ctx->b.used_strategy = mode;
+		ctx->b.used_complexity = comp;
+	}
+}
 
 static void	run_adaptive(t_stack_node **a, t_stack_node **b, t_ctx *ctx)
 {
@@ -19,49 +28,36 @@ static void	run_adaptive(t_stack_node **a, t_stack_node **b, t_ctx *ctx)
 	disorder = compute_disorder(*a);
 	if (disorder < 0.2f)
 	{
-		if (ctx->bench)
-			ctx->b.used_strategy = LINEAR;
- 		if (!linear_sort(a))
-    	{
-        	if (ctx->bench)
-            	ctx->b.used_strategy = MEDIUM;
-        	medium_sort(a, b);
-    	}
-		linear_sort(a);
+		set_bench_strategy(ctx, ADAPTIVE, SIMPLE);
+		simple_sort(a, b);
 	}
 	else if (disorder < 0.5f)
 	{
-		if (ctx->bench)
-			ctx->b.used_strategy = MEDIUM;
+		set_bench_strategy(ctx, ADAPTIVE, MEDIUM);
 		medium_sort(a, b);
 	}
 	else
 	{
-		if (ctx->bench)
-			ctx->b.used_strategy = COMPLEX;
+		set_bench_strategy(ctx, ADAPTIVE, COMPLEX);
 		complex_sort(a, b);
 	}
-	(void)ctx;
 }
 
 void	run_strategy(t_stack_node **a, t_stack_node **b, t_ctx *ctx)
 {
 	if (ctx->strategy == SIMPLE)
 	{
-		if (ctx->bench)
-            ctx->b.used_strategy = SIMPLE;
+		set_bench_strategy(ctx, SIMPLE, SIMPLE);
 		simple_sort(a, b);
 	}
 	else if (ctx->strategy == MEDIUM)
 	{
-		if (ctx->bench)
-            ctx->b.used_strategy = MEDIUM;
+		set_bench_strategy(ctx, MEDIUM, MEDIUM);
 		medium_sort(a, b);
 	}
 	else if (ctx->strategy == COMPLEX)
 	{
-		if (ctx->bench)
-            ctx->b.used_strategy = COMPLEX;
+		set_bench_strategy(ctx, COMPLEX, COMPLEX);
 		complex_sort(a, b);
 	}
 	else

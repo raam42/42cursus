@@ -1,5 +1,4 @@
 NAME = push_swap
-BONUS_NAME = checker
 CC = cc
 INC_FOLDER = inc
 
@@ -26,19 +25,9 @@ utils/medium_sort.c \
 utils/simple_sort.c \
 utils/frees.c \
 utils/ft_safe_atoi.c \
-utils/stack_mngr.c \
-utils/linear_sort.c
+utils/stack_mngr.c
 
 OBJ = $(SRC:.c=.o)
-
-BONUS_SRC = checker.c
-BONUS_OBJ = $(BONUS_SRC:.c=.o)
-
-GNL_SRC = gnl/get_next_line.c
-GNL_OBJ = $(GNL_SRC:.c=.o)
-
-MAIN_OBJ = src/main.o
-BONUS_OBJS = $(filter-out $(MAIN_OBJ),$(OBJ))
 
 all : $(NAME)
 
@@ -48,20 +37,17 @@ $(LIBFT):
 $(NAME) : $(OBJ) $(LIBFT)
 	$(CC) $(INC_FLAGS) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
-bonus : $(LIBFT) $(BONUS_OBJS) $(GNL_OBJ) $(BONUS_OBJ)
-	$(CC) $(INC_FLAGS) $(FLAGS) $(BONUS_OBJS) $(GNL_OBJ) $(BONUS_OBJ) $(LIBFT) -o $(BONUS_NAME)
-
 %.o: %.c
 	$(CC) $(INC_FLAGS) $(FLAGS) -c $< -o $@
 
-clean :
+clean : 
 	@make clean -C $(LIBFT_DIR)
-	rm -f $(OBJ) $(BONUS_OBJ) $(GNL_OBJ)
+	rm -f $(OBJ)
 
 fclean : clean
 	@make fclean -C $(LIBFT_DIR)
-	rm -f $(NAME) $(BONUS_NAME)
+	rm -f $(NAME)
 
 re : fclean all
 
-.PHONY : all clean fclean re bonus
+.PHONY : all clean fclean re
