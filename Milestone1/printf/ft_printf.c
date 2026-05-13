@@ -1,50 +1,49 @@
-#include "ft_printf_bonus.h"
+#include "ft_printf.h"
+
+int	ft_formats(va_list args, const char format)
+{
+	int	len;
+
+	len = 0;
+	if (format == 'c')
+		len += ft_print_char(va_args(args, int));
+	else if (format == 's')
+		len += ft_print_str(va_args(args, char *));
+	else if (format == 'p')
+		len += ft_print_ptr(va_args(args, unsigned long long));
+	else if (format == 'd' || format == 'i')
+		len += ft_print_nbr(va_args(args, int));
+	else if (format == 'u')
+		len += ft_print_unsigned(va_args(args, unsigned int));
+	else if (format == 'x' || format == 'X')
+		len += ft_print_hex(va_args(args, unsigned int), format);
+	else if (format == '%')
+		len += ft_print_char('%');
+	return (len);
+}
 
 int	ft_printf(const char *format, ...)
 {
-	va_list	args;
-	t_format	fmt;
-	int	total;
 	int	i;
-	int	j;
+	int	print_len;
+	va_list	args;
 
 	if (!format)
 		return (-1);
-	va_start(args, format);
-	total = 0;
 	i = 0;
+	print_len = 0;
+	va_start(args, str);
 	while (format[i])
 	{
 		if (format[i] == '%')
 		{
-			if (!format[i + 1])
-				return (va_end(args), -1);
-			init_format(&fmt);
-			j = parse_format(format, i + 1, &fmt);
-			if (j < 0)
-			{
-				j = put_char_count('%');
-				if (j < 0)
-					return (va_end(args), -1);
-				total += j;
-				i++;
-				continue ;
-			}
-			i = j + 1;
-			j = handle_conversion_bonus(args, &fmt);
-			if (j < 0)
-				return (va_end(args), -1);
-			total += j;
-		}
-		else
-		{
-			j = put_char_count(format[i]);
-			if (j < 0)
-				return (va_end(args), -1);
-			total += j;
+			print_len += ft_formats(args, format[i + 1]);
 			i++;
 		}
+		else
+			print_len += ft_print_char(format[i]);
+		i++;
 	}
 	va_end(args);
-	return (total);
+	return (print_len);
 }
