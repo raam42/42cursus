@@ -1,108 +1,116 @@
-*This project has been created as part of the curriculum of 42 by rodrigoa.*
+*This project was developed as part of the 42 curriculum by rodrigoa.*
 
-# ft_printf
-
-***
-
-## Description
-
-`ft_printf` is a reimplementation of the C standard library function `printf`.
-The goal of this project is to understand variadic functions, formatted output,
-and low-level I/O using `write`.
-
-The project is divided into a mandatory part, which reproduces the basic
-behaviour of `printf`, and an optional bonus part, which extends the formatter
-with flags, width, and precision handling.
+# 📘 ft_printf
 
 ***
 
-## Supported Conversions & Flags
+## 📖 Description
 
-**Conversions:**
-*   `%c` : Prints a single character.
-*   `%s` : Prints a string.
-*   `%p` : Prints a `void *` pointer argument in hexadecimal format.
-*   `%d` / `%i` : Prints a decimal (base 10) number.
-*   `%u` : Prints an unsigned decimal (base 10) number.
-*   `%x` / `%X` : Prints a number in hexadecimal (base 16) lowercase format / uppercase format.
-*   `%%` : Prints a percent sign.
+**ft_printf** is a custom implementation of the standard C library function `printf`. 
 
-**Bonus Flags Supported:**
-*   Field width and precision (`.`).
-*   Formatting flags: `-`, `0`, `#`, ` ` (space), and `+`.
+The goal of this project is to master **variadic functions** and understand how arguments are handled on the stack. This implementation mimics the original `printf` for the mandatory specifiers while adhering strictly to **The Norm v4.1**.
+
+
+
+The project involves:
+* Managing variable numbers of arguments using `<stdarg.h>`.
+* Parsing format strings to identify specifiers.
+* Converting different data types (integers, pointers, hex) into strings.
+* Tracking and returning the total number of characters printed.
 
 ***
 
-## Instructions
-
-### Compilation
-
-To compile the mandatory part:
-
-```bash
-make
-````
-
-This will generate the static library:
-
-```text
-libftprintf.a
-```
-
-To compile with bonus support:
-
-```bash
-make bonus
-```
-
-### Usage
-
-Include the header and link the library:
-
+## ✅ Function Prototype
 ```c
-#include "ft_printf.h"
-
-ft_printf("Hello %s (%d)\n", "world", 42);
+int ft_printf(const char *format, ...);
 ```
 
-The `ft_printf` function returns the number of characters printed, or `-1` on
-error.
+## 🔁 Behaviour
+Each call to ft_printf:
 
-## Algorithm and Design
++ Processes the format string and identifies % specifiers.
++ Retrieves arguments using va_start, va_arg, and va_end.
++ Returns the total number of characters printed.
++ Returns -1 if the format string is NULL.
 
-The implementation is based on a format string parser that processes the input
-character by character.
+***
 
-For the mandatory part:
+## 📦 Supported Specifiers
 
-*   Each conversion specifier is detected after `%`
-*   A dispatcher function calls the appropriate printer (`%c`, `%s`, `%d`, etc.)
-*   Output is written directly using `write`
+| Specifier | Description |
+| :--- | :--- |
+| `%c` | Prints a single character. |
+| `%s` | Prints a string (standard C convention). |
+| `%p` | Prints a `void *` pointer argument in hexadecimal format. |
+| `%d` | Prints a decimal (base 10) number. |
+| `%i` | Prints an integer in base 10. |
+| `%u` | Prints an unsigned decimal (base 10) number. |
+| `%x` | Prints a number in hexadecimal (base 16) lowercase format. |
+| `%X` | Prints a number in hexadecimal (base 16) uppercase format. |
+| `%%` | Prints a percent sign. |
 
-For the bonus part:
+***
+## 🗂️ Project Files
+The library is built using the following core files:  
++ ft_printf.c: Main entry point and dispatcher logic.
++ ft_printf_utils.c: Basic printing utilities (char and string).
++ ft_printf_numbers.c: Logic for decimal, unsigned, and hexadecimal conversions.
++ ft_printf_ptr.c: Specific logic for memory addresses (handling (nil) for NULL).
 
-*   The format is first parsed into a `t_format` structure
-*   Flags, width, precision, and specifier are stored explicitly
-*   Printing is split into small layout functions to respect La Norma limits
-*   Padding, precision, and prefixes are applied in a deterministic order
+***
+## 🛠️ Instructions
+CompilationThe project includes a Makefile that compiles the library libftprintf.a. It is designed to automatically compile your libft dependency and avoid relinking.
+```Bash
+make        # Compiles the library
+make clean  # Removes object files
+make fclean # Removes object files and libftprintf.a
+make re     # Rebuilds the entire project
+```
 
-The code is structured into small functions and files in order to comply with
-La Norma v4 constraints (maximum number of lines, variables, and functions per
-file).
+## Usage
+To use the library in your code, include the header and link the library during compilation:
+```C
+#include "ft_printf.h"
+```
+```Bash
+cc main.c libftprintf.a -o my_program
+```
 
-## Resources
+## 🌟 Testing
+To verify the project during evaluation, you can use this hardcoded main.c. It compares the output and return values of ft_printf against the standard library version.
+```C
+#include "ft_printf.h"
+#include <stdio.h>
+#include <limits.h>
 
-*   `man 3 printf`
-*   `man stdarg`
-*   GNU C Library documentation
+int main(void)
+{
+    int ft_len;
+    int std_len;
 
-### AI Usage
+    printf("--- 42 MADRID FT_PRINTF TESTER ---\n\n");
 
-AI tools were used as a **learning and verification aid only**, mainly to:
+    // Test: Basic Types
+    ft_len = ft_printf("Mine: %c %s %u %%%%\n", 'G', "42 Madrid", 4294967295U);
+    std_len = printf("Real: %c %s %u %%%%\n", 'G', "42 Madrid", 4294967295U);
+    printf("Return -> Mine: %d | Real: %d\n\n", ft_len, std_len);
 
-*   review formatting edge cases
-*   double-check compliance with La Norma v4
-*   reason about refactoring strategies when splitting large functions
+    // Test: Hex and Pointers
+    ft_len = ft_printf("Mine: %x %X %p\n", 255, 255, &ft_len);
+    std_len = printf("Real: %x %X %p\n", 255, 255, &ft_len);
+    printf("Return -> Mine: %d | Real: %d\n\n", ft_len, std_len);
 
-All final design decisions and implementations were written and reviewed
-manually.
+    // Test: Edge Cases (NULL and Limits)
+    ft_len = ft_printf("Mine: %p %d %i\n", NULL, INT_MIN, INT_MAX);
+    std_len = printf("Real: %p %d %i\n", NULL, INT_MIN, INT_MAX);
+    printf("Return -> Mine: %d | Real: %d\n", ft_len, std_len);
+
+    return (0);
+}
+```
+
+***
+## 📚 Resources
+  + The Norm v4.1: Strict adherence to 42 coding standards.
+  + Variadic Functions: Understanding stdarg.h for C
+  + Base Conversion Logic:
