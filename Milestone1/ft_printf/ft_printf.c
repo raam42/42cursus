@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rodrigoa <rodrigoa@student.42madrid.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/14 03:06:08 by rodrigoa          #+#    #+#             */
+/*   Updated: 2026/05/14 03:06:26 by rodrigoa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "ft_printf.h"
 
 int	ft_formats(va_list args, const char format)
@@ -24,8 +35,8 @@ int	ft_formats(va_list args, const char format)
 
 int	ft_printf(const char *format, ...)
 {
-	int	i;
-	int	print_len;
+	int		i;
+	int		print_len;
 	va_list	args;
 
 	if (!format)
