@@ -46,11 +46,13 @@ int	ft_printf(const char *format, ...)
 	va_start(args, format);
 	while (format[i])
 	{
-		if (format[i] == '%')
+		if (format[i] == '%' && format[i + 1] != '\0')
 		{
 			print_len += ft_formats(args, format[i + 1]);
 			i++;
 		}
+		else if (format[i] == '%' && format[i + 1] == '\0')
+			return (-1);
 		else
 			print_len += ft_print_char(format[i]);
 		i++;
