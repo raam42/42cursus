@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+#Static type checker cache
+.mypy_cache/
+
+#Testing cache
+.pytest_cache/
+
+#Helper testing tools
+main.py
