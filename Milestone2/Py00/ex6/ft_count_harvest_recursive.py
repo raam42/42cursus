@@ -1,22 +1,23 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    ft_plant_age.py                                    :+:      :+:    :+:    #
+#    ft_count_harvest_recursive.py                      :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: rodrigoa <rodrigoa@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/05/17 16:39:22 by rodrigoa          #+#    #+#              #
-#    Updated: 2026/05/17 17:11:08 by rodrigoa         ###   ########.fr        #
+#    Created: 2026/05/17 17:33:24 by rodrigoa          #+#    #+#              #
+#    Updated: 2026/05/17 18:26:43 by rodrigoa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-def ft_plant_age():
-    ready = "Plant is ready to harvest!"
-    not_yet = "Plant needs more time to grow."
+def ft_count_harvest_recursive(current=1, target=None):
+    if target is None:
+        target = int(input("Days until harvest: "))
 
-    age_days = int(input("Enter plant age in days: "))
+    if current > target:
+        print("Harvest time!")
+        return
 
-    if (age_days > 60):
-        print(f"{ready}")
-    else
-        print(f"{not_yet}"):
+    print(f"Day {current}")
+
+    ft_count_harvest_recursive(current + 1, target)
