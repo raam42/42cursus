@@ -1,0 +1,50 @@
+#!/bin/python3
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ft_plant_factory.py                                :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: rodrigoa <rodrigoa@student.42madrid.com>   +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/05/23 18:28:13 by rodrigoa          #+#    #+#              #
+#    Updated: 2026/05/23 18:28:13 by rodrigoa         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+class Plant:
+    def __init__(self, name: str, height: float, age: int) -> None:
+        self.name: str = name.capitalize()
+        self.height: float = height
+        self.age: int = age
+
+    def show(self) -> None:
+        print(f"Created: {self.name}: {self.height}cm, {self.age} days old")
+
+    def age_one_day(self) -> None:
+        if self.name == "Rose":
+            self.height += 0.8
+        elif self.name == "Sunflower":
+            self.height += 2.5
+        elif self.name == "Cactus":
+            self.height += 0.1
+        else:
+            self.height += 0.5
+        self.height = round(self.height, 1)
+
+
+def ft_plant_factory() -> None:
+    print("=== Plant Factory Output ===")
+
+    plants: list[Plant] = [
+        Plant(name="rose", height=25.0, age=30),
+        Plant(name="oak", height=200.0, age=365),
+        Plant(name="cactus", height=5.0, age=90),
+        Plant(name="sunflower", height=80.0, age=45),
+        Plant(name="fern", height=15.0, age=120),
+    ]
+
+    for plant in plants:
+        plant.show()
+
+if __name__ == "__main__":
+    ft_plant_factory()
