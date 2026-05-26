@@ -3,12 +3,12 @@
 #                                                         :::      ::::::::    #
 #    ft_hello_garden.py                                 :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rodrigoa <rodrigoa@student.42madrid.c      +#+  +:+       +#+         #
+#    By: rodrigoa <rodrigoa@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/05/15 12:55:16 by rodrigoa          #+#    #+#              #
-#    Updated: 2026/05/15 12:57:05 by rodrigoa         ###   ########.fr        #
+#    Created: 2026/05/18 11:35:30 by rodrigoa          #+#    #+#              #
+#    Updated: 2026/05/18 11:49:26 by rodrigoa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-def	ft_hello_garden():
-	print("Hello, Garden Community!")
+def ft_hello_garden():
+    print("Hello, Garden Community!")
