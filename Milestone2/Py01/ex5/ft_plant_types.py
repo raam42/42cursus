@@ -76,7 +76,7 @@ class Plant:
     def grow(self) -> None:
         self._height += self.GROWTH_RATE
         self._height += round(self._height, 1)
-        if is_veg(self, "nutritional_value"):
+        if hasattr(self, "nutritional_value"):
             self.nutritional_value += 1
 
 
@@ -146,29 +146,68 @@ class Vegetable(Plant):
 
 
 def ft_plant_types() -> None:
-    if len(sys.argv) != 4:
+    if len(sys.argv) < 5:
         print("Correct usage parameters below\n"
-              "Flower: python3 ft_plant_typpes.py [flower name] [h][a][color]"
-              "Tree: python3 ft_plant_typpes.py [tree name] [h][a][diameter]"
-              "Vegetable: python3 ft_plant_typpes.py "
+              "Flower: python3 ft_plant_typpes.py flower "
+              "[flower name] [h][a][color]\n"
+              "Tree: python3 ft_plant_typpes.py tree "
+              "[tree name] [h][a][diameter]\n"
+              "Vegetable: python3 ft_plant_typpes.py vegetable "
               "[vegetable name] [h][a][season month]")
         return
 
     species_type: str = sys.argv[1].capitalize()
     try:
-        initial_height: float = float(sys.argv[2])
-        initial_age: int = int(sys.argv[3])
+        initial_height: float = float(sys.argv[3])
+        initial_age: int = int(sys.argv[4])
     except Exception:
         print("Error: Height MUST be a float & Age MUST be an int")
         return
 
     print("=== Dynamic Garden Testing ===")
+    if species_type == "Flower":
+        if len(sys.argv) != 6:
+            print("Error: required parameters "
+                  "Flower [flower name] [height][age][color]")
+            return
+        plant = Flower(sys.argv[2], initial_height, initial_age, sys.argv[5])
+        plant.show()
+        plant.bloom()
+        plant.show()
 
+    elif species_type == "Tree":
+        if len(sys.argv) != 6:
+            print("Error: required parameters "
+                  "Tree [tree name] [height][age][diameter]")
+            return
+        try:
+            diameter = float(sys.argv[5])
+            if diameter < 0:
+                print("Error: diameter can't be negative")
+                return
+        except Exception:
+            print("Error: Trunk diameter must be a float")
+            return
+        plant = Tree(sys.argv[2], initial_height, initial_age, diameter)
+        plant.show()
+        plant.produce_shade()
 
-
-
-        
-
+    elif species_type == "Vegetable":
+        if len(sys.argv) != 7:
+            print("Error: required parameters "
+                  "Vegetable [veggie name] [height][age][month][days]"
+                  )
+            return
+        plant = Vegetable(sys.argv[2], initial_height,
+                          initial_age, sys.argv[5], sys.argv[6])
+        plant.show()
+        print(f"[make {plant.name.lower()} "
+              "grow and age for {sys.argv[6]} days]"
+              )
+        for i in range(int(sys.argv[6])):
+            plant.grow()
+            plant.age()
+        plant.show()
 
 
 if __name__ == "__main__":
