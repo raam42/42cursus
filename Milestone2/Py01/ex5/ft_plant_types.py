@@ -120,7 +120,7 @@ class Tree(Plant):
         print(f"Trunk diameter: {round(self.trunk_diameter, 1)}cm")
 
     def produce_shade(self) -> None:
-        print(f"[asking the {self.name} to produce shade]")
+        print(f"[asking the {self.name.lower()} to produce shade]")
         print(f"{self.name} Tree now produces a shade of "
               f"{round(self._height, 1)}cm long and "
               f"{round(self.trunk_diameter, 1)}cm wide.")
@@ -135,7 +135,7 @@ class Vegetable(Plant):
                  name: str, height: float, age: int, harvest_season: str,
                  days_to_harvest: int) -> None:
         super().__init__(*(name, height, age))
-        self.harvest_season: str = harvest_season
+        self.harvest_season: str = harvest_season.capitalize()
         self.nutritional_value: int = 0
 
     def show(self) -> None:
@@ -146,17 +146,16 @@ class Vegetable(Plant):
 
 def ft_plant_types() -> None:
     if len(sys.argv) < 6:
-        print("Correct usage parameters below\n"
-              "Flower: python3 ft_plant_typpes.py flower "
-              "[flower name] [h][a][color]\n"
-              "Tree: python3 ft_plant_typpes.py tree "
-              "[tree name] [h][a][diameter]\n"
-              "Vegetable: python3 ft_plant_typpes.py vegetable "
-              "[vegetable name] [h][a][season month] [days]")
+        print("Correct usage parameters below...\n"
+              "Flower: python3 ft_plant_types.py flower "
+              "[flower name][h][a][color]\n"
+              "Tree: python3 ft_plant_types.py tree "
+              "[tree name][h][a][diameter]\n"
+              "Veggie: python3 ft_plant_types.py vegetable "
+              "[vegetable name][h][a][season month][days]")
         return
 
     species_type: str = sys.argv[1].capitalize()
-    print(f"{species_type}")
     try:
         initial_height: float = float(sys.argv[3])
         initial_age: int = int(sys.argv[4])
@@ -165,11 +164,13 @@ def ft_plant_types() -> None:
         return
 
     print("=== Garden Plant Types ===")
+    print("===", species_type)
     if species_type == "Flower":
         if len(sys.argv) != 6:
             print("Error: required parameters "
                   "Flower [flower name] [height][age][color]")
             return
+
         flower = Flower(sys.argv[2], initial_height, initial_age, sys.argv[5])
         flower.show()
         flower.bloom()
@@ -193,7 +194,7 @@ def ft_plant_types() -> None:
         tree.produce_shade()
 
     elif species_type == "Vegetable":
-        if len(sys.argv) != 6:
+        if len(sys.argv) != 7:
             print("Error: required parameters "
                   "Vegetable [veggie name] [height][age][month][days]"
                   )
