@@ -121,8 +121,7 @@ class Tree(Plant):
 
     def produce_shade(self) -> None:
         print(f"[asking the {self.name} to produce shade]")
-        print(
-              f"{self.name} Tree now produces a shade of "
+        print(f"{self.name} Tree now produces a shade of "
               f"{round(self._height, 1)}cm long and "
               f"{round(self.trunk_diameter, 1)}cm wide.")
 
@@ -171,11 +170,10 @@ def ft_plant_types() -> None:
             print("Error: required parameters "
                   "Flower [flower name] [height][age][color]")
             return
-        print("caca")
-        plant = Flower(sys.argv[2], initial_height, initial_age, sys.argv[5])
-        plant.show()
-        plant.bloom()
-        plant.show()
+        flower = Flower(sys.argv[2], initial_height, initial_age, sys.argv[5])
+        flower.show()
+        flower.bloom()
+        flower.show()
 
     elif species_type == "Tree":
         if len(sys.argv) != 6:
@@ -190,9 +188,9 @@ def ft_plant_types() -> None:
         except Exception:
             print("Error: Trunk diameter must be a float")
             return
-        planta = Tree(sys.argv[2], initial_height, initial_age, diameter)
-        planta.show()
-        planta.produce_shade()
+        tree = Tree(sys.argv[2], initial_height, initial_age, diameter)
+        tree.show()
+        tree.produce_shade()
 
     elif species_type == "Vegetable":
         if len(sys.argv) != 6:
@@ -200,15 +198,15 @@ def ft_plant_types() -> None:
                   "Vegetable [veggie name] [height][age][month][days]"
                   )
             return
-        plantk = Vegetable(sys.argv[2], initial_height,
+        veggie = Vegetable(sys.argv[2], initial_height,
                            initial_age, sys.argv[5], int(sys.argv[6]))
-        plantk.show()
-        print(f"[make {plantk.name.lower()} "
+        veggie.show()
+        print(f"[make {veggie.name.lower()} "
               f"grow and age for {sys.argv[6]} days]")
         for i in range(int(sys.argv[6])):
-            plantk.grow()
-            plantk.age()
-        plantk.show()
+            veggie.grow()
+            veggie.age()
+        veggie.show()
 
 
 if __name__ == "__main__":
