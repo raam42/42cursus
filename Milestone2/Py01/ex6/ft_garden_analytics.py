@@ -10,8 +10,6 @@
 #    Updated: 2026/05/27 20:05:00 by rodrigoa        ###   ########.fr        #
 #                                                                             #
 # *************************************************************************** #
-import sys
-
 
 class Plant:
     """Generic base class encapsulating shared templates and validation."""
@@ -33,20 +31,25 @@ class Plant:
         else:
             self._age = int(age)
 
-    @classmethod
-    def create_anonymous(cls) -> "Plant":
-        """Class method acting as an alternative factory constructor."""
-        return cls(
-            name="Unknown plant",
-            height=float(cls.BASE_H),
-            age=int(cls.BASE_A)
-        )
-
     def get_height(self) -> float:
         return self._height
 
     def get_age(self) -> int:
         return self._age
+
+    def set_height(self, height: float) -> bool:
+        if height < 0:
+            print(f"{self.name}: Error, height can't be negative")
+            return False
+        self._height = float(height)
+        return True
+
+    def set_age(self, age: int) -> bool:
+        if age < 0:
+            print(f"{self.name}: Error, age can't be negative")
+            return False
+        self._age = int(age)
+        return True
 
     def show(self) -> None:
         print(f"{self.name}: {round(self._height, 1)}cm, {self._age} days old")
@@ -55,6 +58,7 @@ class Plant:
         self._age += 1
 
     def grow(self) -> None:
+        """Master Template Method utilizing class-level attribute constants."""
         self._height += self.GROWTH_RATE
         self._height = round(self._height, 1)
 
@@ -85,22 +89,6 @@ class Flower(Plant):
     def bloom(self) -> None:
         print(f"[asking the {self.name.lower()} to bloom]")
         self._is_blooming = True
-
-
-class Seed(Flower):
-    """Operational Flower subclass designed specifically to track seeds."""
-
-    def __init__(self, name: str, height: float, age: int, color: str) -> None:
-        super().__init__(name=name, height=height, age=age, color=color)
-        self.seed_count: int = 0
-
-    def show(self) -> None:
-        super().show()
-        print(f"Seeds produced: {self.seed_count}")
-
-    def bloom(self) -> None:
-        super().bloom()
-        self.seed_count += 50
 
 
 class Tree(Plant):
@@ -149,87 +137,69 @@ class Vegetable(Plant):
         print(f"Nutritional value: {self.nutritional_value}")
 
 
-def process_single_plant(tokens: list[str]) -> None:
-    """Parses token lists dynamically to instantiate and test subclasses."""
-    species_type: str = tokens[0].capitalize()
-    name: str = tokens[1]
-    
-    try:
-        height: float = float(tokens[2])
-        age: int = int(tokens[3])
-    except Exception:
-        print(f"Skipping line: Invalid numerical types for plant '{name}'")
+def run_garden_analytics(garden: list[Plant]) -> None:
+    """Computes and prints statistical summaries of the garden collection."""
+    if not garden:
+        print("The garden is currently empty.")
         return
 
-    plant: Plant
+    print("=== Garden Analytics Reports ===")
 
-    if species_type == "Flower":
-        if len(tokens) < 5:
-            print("Error: Flower target row missing color attribute.")
-            return
-        plant = Seed(name, height, age, tokens[4])
-        plant.show()
-        plant.bloom()
-        plant.bloom()
-        plant.show()
+    # 1. Average Height calculation across all plants
+    total_height = sum(p.get_height() for p in garden)
+    avg_height = total_height / len(garden)
+    print(f"Total plants tracked: {len(garden)}")
+    print(f"Average garden height: {round(avg_height, 2)}cm")
 
-    elif species_type == "Tree":
-        if len(tokens) < 5:
-            print("Error: Tree target row missing trunk diameter.")
-            return
-        try:
-            diameter = float(tokens[4])
-        except Exception:
-            print("Error: Trunk diameter must be a float.")
-            return
-        plant = Tree(name, height, age, diameter)
-        plant.show()
-        plant.produce_shade()
+    # 2. Total Nutrition accumulation exclusively from Vegetables
+    total_nutrition = sum(
+        v.nutritional_value for v in garden if isinstance(v, Vegetable)
+    )
+    print(f"Total vegetable nutritional yield: {total_nutrition}")
 
-    elif species_type == "Vegetable":
-        if len(tokens) < 5:
-            print("Error: Vegetable target row missing harvest season.")
-            return
-        plant = Vegetable(name, height, age, tokens[4])
-        plant.show()
-        print(f"[make {plant.name.lower()} grow and age for 20 days]")
-        for _ in range(20):
-            plant.grow()
-            plant.age_one_day()
-        plant.show()
-
-    else:
-        # Automatic creation fallback matching our core requirements
-        plant = Plant.create_anonymous()
-        plant.show()
+    # 3. Collective Shade Reports triggered for all Trees
+    print("\n--- Collective Canopy Shade Reports ---")
+    for plant in garden:
+        if isinstance(plant, Tree):
+            plant.produce_shade()
 
 
 def ft_garden_analytics() -> None:
-    """Drives automated test parsing reading configuration input paths."""
-    if len(sys.argv) != 2:
-        print("Usage: python3 ft_plant_types.py [test_file.txt]")
-        return
+    """Initializes a clean test garden list and performs a simple run."""
+    print("=== Initializing Simple Garden Testing Suite ===")
 
-    filepath: str = sys.argv[1]
-    print(f"=== Reading Data Suite from: {filepath} ===\n")
+    # Straightforward internal definitions containing exactly what the subject hints at
+    garden_registry: list[Plant] = [
+        Flower(name="rose", height=15.0, age=10, color="red"),
+        Tree(name="oak", height=200.0, age=365, trunk_diameter=5.0),
+        Vegetable(name="tomato", height=5.0, age=10, harvest_season="April")
+    ]
 
-    try:
-        with open(filepath, "r") as file:
-            for line_num, line in enumerate(file, 1):
-                clean_line = line.strip()
-                if not clean_line or clean_line.startswith("#"):
-                    continue
+    print("\n--- Baseline Population States ---")
+    for plant in garden_registry:
+        plant.show()
+        print()
 
-                tokens = clean_line.split(",")
-                if len(tokens) < 4:
-                    print(f"Line {line_num}: Corrupted layout formatting.")
-                    continue
+    # Simulate a 20-day natural jump across the entire population list
+    print("[Simulating 20 days of unified garden growth]")
+    for _ in range(20):
+        for plant in garden_registry:
+            plant.grow()
+            plant.age_one_day()
 
-                print(f"--- Running Automated Test Case {line_num} ---")
-                process_single_plant(tokens)
-                print()
-    except FileNotFoundError:
-        print(f"Error: Target path file framework '{filepath}' not found.")
+    # Trigger custom actions manually on specific subclasses post-simulation
+    print("\n--- Triggering Class Specific Actions ---")
+    for plant in garden_registry:
+        if isinstance(plant, Flower):
+            plant.bloom()
+
+    print("\n--- Final Population States ---")
+    for plant in garden_registry:
+        plant.show()
+        print()
+
+    # Execute analytics calculations pass
+    run_garden_analytics(garden_registry)
 
 
 if __name__ == "__main__":
