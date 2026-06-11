@@ -21,6 +21,7 @@ class Plant:
     def __init__(self, name: str, height: float, age: int) -> None:
         self.name: str = name.capitalize()
 
+        # Dynamic security checks leveraging subclass constant attributes
         if height < 0:
             self._height = float(self.BASE_H)
         else:
@@ -31,6 +32,20 @@ class Plant:
         else:
             self._age = int(age)
 
+    @classmethod
+    def create_anonymous(cls) -> "Plant":
+        """Class method factory acting as an alternative constructor."""
+        return cls(
+            name="Unknown plant",
+            height=float(cls.BASE_H),
+            age=int(cls.BASE_A)
+        )
+
+    @staticmethod
+    def is_under_a_year(age: int) -> bool:
+        """Static validation utility checking if an age profile is < 365."""
+        return age < 365
+
     def get_height(self) -> float:
         return self._height
 
@@ -40,6 +55,7 @@ class Plant:
     def set_height(self, height: float) -> bool:
         if height < 0:
             print(f"{self.name}: Error, height can't be negative")
+            print("Height update rejected")
             return False
         self._height = float(height)
         return True
@@ -47,6 +63,7 @@ class Plant:
     def set_age(self, age: int) -> bool:
         if age < 0:
             print(f"{self.name}: Error, age can't be negative")
+            print("Age update rejected")
             return False
         self._age = int(age)
         return True
@@ -58,7 +75,7 @@ class Plant:
         self._age += 1
 
     def grow(self) -> None:
-        """Master Template Method utilizing class-level attribute constants."""
+        """Master structural Template Method utilizing class overrides."""
         self._height += self.GROWTH_RATE
         self._height = round(self._height, 1)
 
@@ -89,6 +106,24 @@ class Flower(Plant):
     def bloom(self) -> None:
         print(f"[asking the {self.name.lower()} to bloom]")
         self._is_blooming = True
+
+
+class Seed(Flower):
+    """Operational Flower subclass designed specifically to track seeds."""
+
+    def __init__(self, name: str, height: float, age: int, color: str) -> None:
+        super().__init__(name=name, height=height, age=age, color=color)
+        self.seed_count: int = 0
+
+    def show(self) -> None:
+        """Extends Flower status output to include exact seed metrics."""
+        super().show()
+        print(f"Seeds produced: {self.seed_count}")
+
+    def bloom(self) -> None:
+        """Accumulates 50 seeds on every single successive bloom call."""
+        super().bloom()
+        self.seed_count += 50
 
 
 class Tree(Plant):
@@ -165,15 +200,21 @@ def run_garden_analytics(garden: list[Plant]) -> None:
 
 
 def ft_garden_analytics() -> None:
-    """Initializes a clean test garden list and performs a simple run."""
-    print("=== Initializing Simple Garden Testing Suite ===")
+    """Initializes a complete test garden list and performs a simple run."""
+    print("=== Initializing All Subclasses Suite ===")
 
-    # Straightforward internal definitions containing exactly what the subject hints at
+    # Instantiating a collection that implements every single layout requirement
     garden_registry: list[Plant] = [
-        Flower(name="rose", height=15.0, age=10, color="red"),
+        Seed(name="rose", height=15.0, age=10, color="red"),
         Tree(name="oak", height=200.0, age=365, trunk_diameter=5.0),
-        Vegetable(name="tomato", height=5.0, age=10, harvest_season="April")
+        Vegetable(name="tomato", height=5.0, age=10, harvest_season="April"),
+        Plant.create_anonymous()
     ]
+
+    print("\n--- Testing Class Static Validation Helper ---")
+    for plant in garden_registry:
+        is_young = Plant.is_under_a_year(plant.get_age())
+        print(f"{plant.name} age check (< 365 days): {is_young}")
 
     print("\n--- Baseline Population States ---")
     for plant in garden_registry:
@@ -191,6 +232,8 @@ def ft_garden_analytics() -> None:
     print("\n--- Triggering Class Specific Actions ---")
     for plant in garden_registry:
         if isinstance(plant, Flower):
+            # Seed inherits from Flower, so this captures our seed counts perfectly!
+            plant.bloom()
             plant.bloom()
 
     print("\n--- Final Population States ---")
