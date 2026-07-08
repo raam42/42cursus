@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 # *************************************************************************** #
 #                                                                             #
 #                                                        :::      ::::::::    #
@@ -6,10 +6,11 @@
 #                                                    +:+ +:+         +:+      #
 #    By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+         #
 #                                                +#+#+#+#+#+   +#+            #
-#    Created: 2026/05/27 20:05:00 by rodrigoa         #+#    #+#              #
-#    Updated: 2026/05/27 20:05:00 by rodrigoa        ###   ########.fr        #
+#    Created: 2026/07/09 00:15:00 by rodrigoa         #+#    #+#              #
+#    Updated: 2026/07/09 00:15:00 by rodrigoa        ###   ########.fr        #
 #                                                                             #
 # *************************************************************************** #
+
 
 class Plant:
     """Generic base class encapsulating shared templates and validation."""
@@ -18,10 +19,21 @@ class Plant:
     BASE_A: int = 0
     GROWTH_RATE: float = 0.5
 
+    class _Stats:
+        """Nested class managing encapsulated lifecycle statistics."""
+        def __init__(self) -> None:
+            self._grow_calls: int = 0
+            self._age_calls: int = 0
+            self._show_calls: int = 0
+
+        def display(self) -> None:
+            print(f"Stats: {self._grow_calls} grow, {self._age_calls} age, "
+                  f"{self._show_calls} show")
+
     def __init__(self, name: str, height: float, age: int) -> None:
         self.name: str = name.capitalize()
+        self._stats = self._Stats()
 
-        # Dynamic security checks leveraging subclass constant attributes
         if height < 0:
             self._height = float(self.BASE_H)
         else:
@@ -55,7 +67,6 @@ class Plant:
     def set_height(self, height: float) -> bool:
         if height < 0:
             print(f"{self.name}: Error, height can't be negative")
-            print("Height update rejected")
             return False
         self._height = float(height)
         return True
@@ -63,19 +74,21 @@ class Plant:
     def set_age(self, age: int) -> bool:
         if age < 0:
             print(f"{self.name}: Error, age can't be negative")
-            print("Age update rejected")
             return False
         self._age = int(age)
         return True
 
     def show(self) -> None:
+        self._stats._show_calls += 1
         print(f"{self.name}: {round(self._height, 1)}cm, {self._age} days old")
 
-    def age_one_day(self) -> None:
+    def age(self) -> None:
+        self._stats._age_calls += 1
         self._age += 1
 
     def grow(self) -> None:
         """Master structural Template Method utilizing class overrides."""
+        self._stats._grow_calls += 1
         self._height += self.GROWTH_RATE
         self._height = round(self._height, 1)
 
@@ -133,17 +146,30 @@ class Tree(Plant):
     BASE_A: int = 365
     GROWTH_RATE: float = 2.5
 
+    class _TreeStats(Plant._Stats):
+        """Extended nested class to track Tree-specific behaviors."""
+        def __init__(self) -> None:
+            super().__init__()
+            self._shade_calls: int = 0
+
+        def display(self) -> None:
+            super().display()
+            print(f" {self._shade_calls} shade")
+
     def __init__(
         self, name: str, height: float, age: int, trunk_diameter: float
     ) -> None:
         super().__init__(name=name, height=height, age=age)
         self.trunk_diameter: float = float(trunk_diameter)
+        # Overwrite the base stats object with the specialized Tree version
+        self._stats = self._TreeStats()
 
     def show(self) -> None:
         super().show()
         print(f"Trunk diameter: {round(self.trunk_diameter, 1)}cm")
 
     def produce_shade(self) -> None:
+        self._stats._shade_calls += 1
         print(f"[asking the {self.name.lower()} to produce shade]")
         print(
             f"Tree {self.name} now produces a shade of "
@@ -172,6 +198,12 @@ class Vegetable(Plant):
         print(f"Nutritional value: {self.nutritional_value}")
 
 
+def display_statistics(plant: Plant) -> None:
+    """Unique standalone function to output encapsulated statistics."""
+    print(f"[statistics for {plant.name}]")
+    plant._stats.display()
+
+
 def run_garden_analytics(garden: list[Plant]) -> None:
     """Computes and prints statistical summaries of the garden collection."""
     if not garden:
@@ -180,68 +212,56 @@ def run_garden_analytics(garden: list[Plant]) -> None:
 
     print("=== Garden Analytics Reports ===")
 
-    # 1. Average Height calculation across all plants
     total_height = sum(p.get_height() for p in garden)
     avg_height = total_height / len(garden)
     print(f"Total plants tracked: {len(garden)}")
     print(f"Average garden height: {round(avg_height, 2)}cm")
 
-    # 2. Total Nutrition accumulation exclusively from Vegetables
     total_nutrition = sum(
         v.nutritional_value for v in garden if isinstance(v, Vegetable)
     )
     print(f"Total vegetable nutritional yield: {total_nutrition}")
 
-    # 3. Collective Shade Reports triggered for all Trees
-    print("\n--- Collective Canopy Shade Reports ---")
-    for plant in garden:
-        if isinstance(plant, Tree):
-            plant.produce_shade()
-
 
 def ft_garden_analytics() -> None:
     """Initializes a complete test garden list and performs a simple run."""
-    print("=== Initializing All Subclasses Suite ===")
+    print("=== Initializing All Subclasses Suite ===\n")
 
-    # Instantiating a collection that implements every single layout requirement
     garden_registry: list[Plant] = [
-        Seed(name="rose", height=15.0, age=10, color="red"),
+        Seed(name="sunflower", height=80.0, age=45, color="yellow"),
         Tree(name="oak", height=200.0, age=365, trunk_diameter=5.0),
         Vegetable(name="tomato", height=5.0, age=10, harvest_season="April"),
         Plant.create_anonymous()
     ]
 
-    print("\n--- Testing Class Static Validation Helper ---")
-    for plant in garden_registry:
-        is_young = Plant.is_under_a_year(plant.get_age())
-        print(f"{plant.name} age check (< 365 days): {is_young}")
-
-    print("\n--- Baseline Population States ---")
+    print("--- Baseline Population States ---")
     for plant in garden_registry:
         plant.show()
         print()
 
-    # Simulate a 20-day natural jump across the entire population list
     print("[Simulating 20 days of unified garden growth]")
     for _ in range(20):
         for plant in garden_registry:
             plant.grow()
-            plant.age_one_day()
+            plant.age()
 
-    # Trigger custom actions manually on specific subclasses post-simulation
     print("\n--- Triggering Class Specific Actions ---")
     for plant in garden_registry:
         if isinstance(plant, Flower):
-            # Seed inherits from Flower, so this captures our seed counts perfectly!
             plant.bloom()
-            plant.bloom()
+        elif isinstance(plant, Tree):
+            plant.produce_shade()
 
     print("\n--- Final Population States ---")
     for plant in garden_registry:
         plant.show()
         print()
+        
+    print("--- Object Lifecycle Statistics ---")
+    for plant in garden_registry:
+        display_statistics(plant)
+        print()
 
-    # Execute analytics calculations pass
     run_garden_analytics(garden_registry)
 
 
