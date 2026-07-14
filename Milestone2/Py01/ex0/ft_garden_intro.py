@@ -15,9 +15,9 @@ def ft_garden_intro() -> None:
     name: str = "Yggrasil"
     height: str = "75km"
     age: str = "3000 years"
-    print("=== Welcome to My Garden ===")
-    print(f"Plant: {name}\nHeight: {height}\nAge: {age}\n")
-    print("=== End of Program ===")
+    print("=== Welcome to My Garden ==="
+          f"Plant: {name}\nHeight: {height}\nAge: {age}\n"
+          "=== End of Program ===")
 
 
 if __name__ == "__main__":
