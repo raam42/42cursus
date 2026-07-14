@@ -12,16 +12,16 @@
 # *************************************************************************** #
 
 class Plant:
-    def __init__(self, name: str, height: float, age: int) -> None:
+    def __init__(self, name: str, height: float, days: int) -> None:
         self.name: str = name.capitalize()
         self.height: float = height
-        self.age: int = age
+        self.days: int = days
 
     def show(self) -> None:
-        print(f"Created: {self.name}: {self.height}cm, {self.age} days old")
+        print(f"Created: {self.name}: {self.height}cm, {self.days} days old")
 
-    def age_one_day(self) -> None:
-        self.age += 1
+    def age(self) -> None:
+        self.days += 1
 
     def grow(self) -> None:
         if self.name == "Rose":
@@ -38,11 +38,11 @@ class Plant:
 def ft_plant_factory() -> None:
     print("=== Plant Factory Output ===")
     plants: list[Plant] = [
-        Plant(name="rose", height=25.0, age=30),
-        Plant(name="oak", height=200.0, age=365),
-        Plant(name="cactus", height=5.0, age=90),
-        Plant(name="sunflower", height=80.0, age=45),
-        Plant(name="fern", height=15.0, age=120),
+        Plant(name="rose", height=25.0, days=30),
+        Plant(name="oak", height=200.0, days=365),
+        Plant(name="cactus", height=5.0, days=90),
+        Plant(name="sunflower", height=80.0, days=45),
+        Plant(name="fern", height=15.0, days=120),
 
     ]
 
