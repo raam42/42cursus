@@ -126,7 +126,9 @@ def display_statistics(plant: Plant) -> None:
 
 
 def main() -> None:
-    """Matches the exact execution trace of the curriculum."""
+    """Matches the exact execution trace AND adds a polymorphic bonus."""
+    
+    # 1. REQUIRED SUBJECT TRACE
     print("=== Tree\n")
     oak = Tree("oak", 200.0, 365, 5.0)
     oak.produce_shade()
@@ -136,8 +138,6 @@ def main() -> None:
     print("\n=== Seed\n")
     sunflower = Seed("sunflower", 80.0, 45, "yellow")
     sunflower.show()
-
-    print("\n[make sunflower grow, age and bloom]")
     sunflower.grow()
     sunflower.age()
     sunflower.bloom()
@@ -151,6 +151,18 @@ def main() -> None:
     anon = Plant("Unknown plant", 0.0, 0)
     anon.show()
     display_statistics(anon)
+
+    # 2. YOUR POLYMORPHIC REGISTRY BONUS
+    print("\n\n=== Bonus: Polymorphic Registry Test ===")
+    garden_registry: list[Plant] = [
+        Seed(name="rose", height=80.0, days=45, color="yellow"),
+        Tree(name="oak", height=200.0, days=365, trunk_diameter=5.0),
+        Vegetable(name="tomato", height=5.0, days=9, harvest_season="November")
+    ]
+    for plant in garden_registry:
+        plant.show()
+        plant.grow()
+        print()
 
 
 if __name__ == "__main__":
