@@ -28,10 +28,8 @@ def ft_data_alchemist() -> None:
     only_capitalized: list[str] = [name for name in initial_players if name == name.capitalize()]
     print(f"New list of capitalized names only: {only_capitalized}")
 
-  
     score_dict: dict[str, int] = {name: random.randint(0, 1000) for name in all_capitalized}
     print(f"\nScore dict: {score_dict}")
-
 
     average_score: float = sum(score_dict.values()) / len(score_dict)
     print(f"Score average is {round(average_score, 2)}")
