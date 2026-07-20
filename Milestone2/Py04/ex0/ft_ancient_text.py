@@ -26,7 +26,7 @@ def ft_ancient_text() -> None:
     # 2. Print required headers
     print("=== Cyber Archives Recovery ===")
     print(f"Accessing file '{filename}'")
-
+    print("===\n")
     file_obj: typing.Optional[typing.IO[str]] = None
 
     # 3. Attempt file operations
@@ -45,6 +45,7 @@ def ft_ancient_text() -> None:
             
         # Manually close the file to free up system resources
         file_obj.close()
+        print("\n===")
         print(f"File '{filename}' closed.")
         
     except OSError as e:
