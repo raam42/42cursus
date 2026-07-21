@@ -121,7 +121,7 @@ if __name__ == "__main__":
     print("Test invalid ingestion of string 'foo' without prior validation:")
     try:
         # This explicitly passes invalid data to trigger the mypy warning
-        num_proc.ingest("foo")
+        num_proc.ingest("foo")  # type: ignore[arg-type]
     except Exception as e:
         print(f"Got exception: {e}")
 
