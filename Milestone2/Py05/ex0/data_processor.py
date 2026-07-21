@@ -125,7 +125,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Got exception: {e}")
 
-    num_data = [1, 2, 3, 4, 5]
+    num_data: list[int | float] = [1, 2, 3, 4, 5]
     print(f"Processing data: {num_data}")
     num_proc.ingest(num_data)
     print("Extracting 3 values...")
