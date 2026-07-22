@@ -6,8 +6,8 @@
 #                                                    +:+ +:+         +:+      #
 #    By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+         #
 #                                                +#+#+#+#+#+   +#+            #
-#    Created: 2026/07/21 12:45:00 by rodrigoa          #+#    #+#             #
-#    Updated: 2026/07/21 12:45:00 by rodrigoa         ###   ########.fr       #
+#    Created: 2026/07/22 17:06:43 by rodrigoa         #+#    #+#              #
+#    Updated: 2026/07/22 17:06:43 by rodrigoa        ###   ########.fr        #
 #                                                                             #
 # *************************************************************************** #
 import typing
@@ -21,7 +21,7 @@ from data_processor import (
 
 class ExportPlugin(typing.Protocol):
     """
-    Protocol defining the required interface for export plugins.
+    Protocol defining the required interfce for export plugins.
     Enforces a strict method signature for duck typing compatibility.
     """
     def process_output(self, data: list[tuple[int, str]]) -> None:
@@ -32,16 +32,14 @@ class CSVExportPlugin:
     """Exports processed data into a manually formatted CSV string."""
     def process_output(self, data: list[tuple[int, str]]) -> None:
         print("CSV Output:")
-        # Extracts only the value, ignoring the rank for CSV
         values = [val for _, val in data]
         print(", ".join(values))
 
 
 class JSONExportPlugin:
-    """Exports processed data into a manually formatted JSON string."""
+    """Exports processed data into a manually formatted JSON string"""
     def process_output(self, data: list[tuple[int, str]]) -> None:
         print("JSON Output:")
-        # Manually constructs the JSON payload to avoid unauthorized imports
         items = [f'"item_{rank}": "{val}"' for rank, val in data]
         print("{" + ", ".join(items) + "}")
 
@@ -51,7 +49,6 @@ class DataStream:
     Central dispatcher that dynamically routes data to processors
     and manages export pipelines via plugin integration.
     """
-
     def __init__(self) -> None:
         self.processors: list[DataProcessor] = []
 
@@ -98,16 +95,14 @@ class DataStream:
                 try:
                     data_to_export.append(processor.output())
                 except RuntimeError:
-                    break  # Stop extracting if processor storage is empty
-
+                    break
             if data_to_export:
                 plugin.process_output(data_to_export)
 
 
 if __name__ == "__main__":
-    print("=== Code Nexus - Data Pipeline ===\n")
-
-    print("Initialize Data Stream...")
+    print("=== Code Nexus - Data Pipeline ===\n"
+          "\nInitialize Data Stream...")
     stream = DataStream()
     stream.print_processors_stats()
 
@@ -127,19 +122,23 @@ if __name__ == "__main__":
     ]
 
     print(f"Send first batch of data on stream: {batch1}")
-    stream.process_stream(batch1)
+    try:
+        stream.process_stream(batch1)
+    except Exception as e:
+        print(f"Failed to process first batch: {e}")
     stream.print_processors_stats()
 
     print("\nSend 3 processed data from each processor to a CSV plugin:")
     csv_plugin = CSVExportPlugin()
-    stream.output_pipeline(3, csv_plugin)
-
-    print()
+    try:
+        stream.output_pipeline(3, csv_plugin)
+    except Exception as e:
+        print(f"Failed to execute CSV output pipeline: {e}")
     stream.print_processors_stats()
 
     batch2 = [
         21,
-        ['I love AI', 'LLMs are wonderful', 'Stay healthy'],
+        ['I hate AI', 'LLMs are horrible', 'Stay healthy'],
         [{'log_level': 'ERROR', 'log_message': '500 server crash'},
          {'log_level': 'NOTICE',
           'log_message': 'Certificate expires in 10 days'}],
@@ -147,13 +146,18 @@ if __name__ == "__main__":
         'World hello'
     ]
 
-    print(f"\nSend another batch of data: {batch2}")
-    stream.process_stream(batch2)
+    print(f"\nSend another batch or data: {batch2}")
+    try:
+        stream.process_stream(batch2)
+    except Exception as e:
+        print(f"Failed to process the second batch: {e}")
     stream.print_processors_stats()
 
     print("\nSend 5 processed data from each processor to a JSON plugin:")
     json_plugin = JSONExportPlugin()
-    stream.output_pipeline(5, json_plugin)
-
+    try:
+        stream.output_pipeline(5, json_plugin)
+    except Exception as e:
+        print(f"Failed to execute JSON output pipeline: {e}")
     print()
     stream.print_processors_stats()
