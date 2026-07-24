@@ -1,23 +1,15 @@
 # *************************************************************************** #
 #                                                                             #
 #                                                        :::      ::::::::    #
-#    potions.py                                        :+:      :+:    :+:    #
+#    __init__.py                                       :+:      :+:    :+:    #
 #                                                    +:+ +:+         +:+      #
 #    By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+         #
 #                                                +#+#+#+#+#+   +#+            #
-#    Created: 2026/07/24 20:21:40 by rodrigoa         #+#    #+#              #
-#    Updated: 2026/07/24 20:25:07 by rodrigoa        ###   ########.fr        #
+#    Created: 2026/07/24 20:41:08 by rodrigoa         #+#    #+#              #
+#    Updated: 2026/07/24 20:41:47 by rodrigoa        ###   ########.fr        #
 #                                                                             #
 # *************************************************************************** #
-import elements
-from alchemy.elements import create_earth, create_air
+from .light_spellbook import light_spell_record
 
 
-def healing_potion() -> str:
-    return (f"Healiing potion brewed with '{create_earth()}'"
-            f" and '{create_air}'")
-
-
-def strength_potion() -> str:
-    return (f"Strength potion brewed with '{elements.create_fire()}'"
-            f"and '{elements.create_water()}'")
+__all__ = ["light_spell_record"]

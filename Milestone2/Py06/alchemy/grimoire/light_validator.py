@@ -1,23 +1,19 @@
 # *************************************************************************** #
 #                                                                             #
 #                                                        :::      ::::::::    #
-#    potions.py                                        :+:      :+:    :+:    #
+#    light_validator.py                                :+:      :+:    :+:    #
 #                                                    +:+ +:+         +:+      #
 #    By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+         #
 #                                                +#+#+#+#+#+   +#+            #
-#    Created: 2026/07/24 20:21:40 by rodrigoa         #+#    #+#              #
-#    Updated: 2026/07/24 20:25:07 by rodrigoa        ###   ########.fr        #
+#    Created: 2026/07/24 20:46:13 by rodrigoa         #+#    #+#              #
+#    Updated: 2026/07/24 20:48:28 by rodrigoa        ###   ########.fr        #
 #                                                                             #
 # *************************************************************************** #
-import elements
-from alchemy.elements import create_earth, create_air
+from .light_spellbook import light_spell_allowed_ingredients
 
 
-def healing_potion() -> str:
-    return (f"Healiing potion brewed with '{create_earth()}'"
-            f" and '{create_air}'")
-
-
-def strength_potion() -> str:
-    return (f"Strength potion brewed with '{elements.create_fire()}'"
-            f"and '{elements.create_water()}'")
+def validate_ingredients(ingredients: str) -> str:
+    allowed = light_spell_allowed_ingredients()
+    if any(ingredient in ingredients.lower() for ingredient in allowed):
+        return f"{ingredients} VALID"
+    return f"{ingredients} INVALID"
