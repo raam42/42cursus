@@ -1,10 +1,7 @@
-from alchemy import potions
-from Py06 import elements
+from alchemy import heal1, strength_potion
 
 
 if __name__ == "__main__":
     print("=== Distillation 0 ===\n"
-          "Testing strength_potion: Strength potion brewed with"
-          f"{elements.create_fire} and {elements.create_water}"
-          "Testing healing_potion: Healing potion brewed with"
-          f"{}")
+          f"Testing strength_potion: {strength_potion}\n"
+          f"Testing healing_potion: {heal1}")
