@@ -13,8 +13,7 @@ import alchemy.grimoire
 
 
 if __name__ == "__main__":
-    record = alchemy.grimoire.light_spell_record
-    (
+    record = alchemy.grimoire.light_spell_record(
         'Fantasy', 'Earth, wind and fire'
     )
     print("=== Kaboom 0 ===\n"
