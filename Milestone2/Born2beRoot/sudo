@@ -1,0 +1,6 @@
+# --- Born2beRoot Mandatory Sudo Configuration ---
+Defaults        passwd_timeout=2
+Defaults        badpass_message="Custom incorrect password message"
+Defaults        logfile="/var/log/sudo/sudo.log"
+Defaults        log_input, log_output
+Defaults        requiretty

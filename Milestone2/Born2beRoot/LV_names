@@ -1,0 +1,8 @@
+Logical Volume Name,Required Size,Mount Point
+root,10G,/
+swap,2.3G,[SWAP] (or Swap Area)
+home,5G,/home
+var,3G,/var
+srv,3G,/srv
+tmp,3G,/tmp
+var--log,4G,/var/log
