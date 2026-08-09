@@ -1,44 +1,72 @@
-*This project has been created as part of the 42 curriculum by rodrigoa.*
+# Born2beRoot
 
-## Project Description
-Born2beRoot is a project designed to introduce us to system administration by creating our first strict and secure server using Debian. The primary goal is to build a virtualized infrastructure from scratch that complies with rigorous security policies regarding passwords, firewalls, user management, SSH access control, and automated system monitoring.
-
----
-
-## Operating System Choice: Debian vs. Rocky Linux
-
-For this project, I chose **Debian**. 
-
-* **Debian**: 
-  * *Advantages*: It is an extremely stable, lightweight system ideal for headless servers, with a massive community and extensive documentation. It uses the `apt`/`aptitude` package manager and the AppArmor security framework.
-  * *Disadvantages*: Software packages can be more conservative and older compared to bleeding-edge distributions, prioritizing stability over the latest features.
-* **Rocky Linux**: 
-  * *Advantages*: It is a direct downstream successor of CentOS, heavily oriented toward enterprise environments and Red Hat Enterprise Linux (RHEL). It uses `DNF` and the Mandatory Access Control system `SELinux`.
-  * *Disadvantages*: For a user starting out in Unix system administration, the syntax and policy management with SELinux have a considerably steeper learning curve.
+> **Project Status:** Completed & Hardened  
+> **Evaluated OS:** Debian 12 (Bookworm) / Debian 13  
+> **Virtualization:** VirtualBox  
 
 ---
 
-## Main Design Choices
-
-* **Partitioning (LVM)**: Logical Volume Manager (LVM) with encryption was used to divide the disk into logical partitions (`/`, `/boot`, `/home`, `/var`, `/srv`, `/tmp`), ensuring flexibility in space management and security against physical unauthorized access.
-* **Security Policies**: 
-  * Strict password complexity rules were implemented using `libpam-pwquality` (minimum length, prohibition of sequences or the username).
-  * Password aging was configured via `/etc/login.defs` (30-day expiration, 7-day warning).
-* **User Administration**: Specific groups like `sudo` and `user42` were created to restrict administrative privileges, forcing regular users to operate via audited commands.
-* **Network Services**: Remote access was restricted using exclusively the custom port `4242` for SSH, completely blocking direct root login, and an active firewall was implemented using `UFW`.
+## 📋 Table of Contents
+1. [Project Overview](#project-overview)
+2. [System Architecture & Specifications](#system-architecture--specifications)
+3. [Security & Network Configuration](#security--network-configuration)
+4. [Evaluation Defense Guide (Q&A)](#evaluation-defense-guide-qa)
 
 ---
 
-## Technology Comparisons
+## 🛠️ Project Overview
+**Born2beRoot** is an introduction to system administration and virtualization. The goal of this project is to set up your first secure virtual machine following strict structural and security rules, utilizing LVM partitioning, a secure firewall, a custom password policy, and a functional web server setup (with WordPress for the bonus).
 
-### Debian vs. Rocky Linux
-* **Debian** prioritizes absolute stability based on free software, managing packages via `apt`/`aptitude` and AppArmor. **Rocky Linux** focuses on the Red Hat-compatible enterprise ecosystem, using RPM packages (`DNF`) and SELinux security.
+---
 
-### AppArmor vs. SELinux
-* **AppArmor** uses file path-based profiles to restrict program capabilities, making it more intuitive and easier to debug. **SELinux** (Security-Enhanced Linux) uses Mandatory Access Control security labels assigned to every process and file, offering superior security granularity but with noticeably higher configuration complexity.
+## 💻 System Architecture & Specifications
 
-### UFW vs. firewalld
-* **UFW (Uncomplicated Firewall)** is a simplified frontend for `iptables`/`nftables` designed to be intuitive and easy to configure via simple rule commands. **firewalld** uses network zones and allows dynamic rule management without interrupting active connections, making it more common in Red Hat-oriented corporate environments.
+### 🗄️ LVM (Logical Volume Manager) Structure
+The system uses LVM to organize partitions flexibly, separating critical mount points to prevent disk overflow and isolate system logs/data:
+* **`root (/)`**: Main system partition.
+* **`swap`**: Virtual memory allocation.
+* **`home`**: User data and configurations.
+* **`srv`**: Data for services (like WordPress/web server files).
+* **`var`**: System logs, package caches, and variable files.
+* **`var/log`**: Dedicated partition for logs to prevent log-flooding attacks from crashing the core system.
 
-### VirtualBox vs. UTM
-* **VirtualBox** is a classic, cross-platform Type-2 hypervisor (Windows, Linux, macOS) widely compatible for traditional x86_64 virtualization. **UTM** is a virtualization solution based on QEMU optimized natively for macOS systems (Apple Silicon and Intel), ideal for leveraging hardware acceleration on Mac machines.
+### 🔒 Security & Monitoring Implementations
+* **Password Policy:** Enforced via `libpam-pwquality` (minimum length, uppercase/lowercase, numbers, no consecutive repeating characters, and username checks).
+* **Firewall (UFW):** Configured to block all incoming traffic by default and only allow specific necessary ports (such as SSH on port `4242` and HTTP/HTTPS if applicable).
+* **AppArmor:** Active Linux kernel security module restricting application capabilities.
+* **Monitoring Script (`monitoring.sh`):** A custom bash script running every 10 minutes via cron that broadcasts vital system metrics (uptime, CPU load, disk/memory usage, active connections, LVM status, etc.) to all terminals.
+
+---
+
+## 🧠 Evaluation Defense Guide (Q&A)
+
+This section contains the core theoretical answers required during your Born2beRoot defense:
+
+### 1. What is a Virtual Machine?
+Es un software que simula un sistema de computación y puede ejecutar programas como si fuese una computadora real. Permite crear múltiples entornos simulados o recursos dedicados desde un solo sistema de hardware físico.
+
+### 2. Why did you choose Debian?
+Esto es algo personal para cada uno, mi opinión: El propio subject explica que es más sencillo hacerlo en Debian y si buscas documentación/tutoriales hay muchos y todos se han hecho en Debian.
+
+### 3. Core Differences: Debian vs. Rocky Linux
+| Aspect | Debian | Rocky Linux |
+| :--- | :--- | :--- |
+| **Base** | Independiente | RHEL |
+| **Package Manager** | APT (`.deb`) | DNF (`.rpm`) |
+| **Stability** | Flexible | Muy estable (empresas) |
+| **Lifecycle / Support** | 3-5 años | 10 años |
+| **Typical Use** | General | Servidores empresariales |
+
+> **Resumen:** Debian es más versátil y comunitario. Rocky es una opción robusta y empresarial con soporte a largo plazo.
+
+### 4. What is the purpose of Virtual Machines?
+Su objetivo es el de proporcionar un entorno de ejecución independiente de la plataforma de hardware y del sistema operativo, que oculte los detalles de la plataforma subyacente y permita que un programa se ejecute siempre de la misma forma sobre cualquier plataforma.
+
+### 5. Differences between `apt` and `aptitude`
+Aptitude es una versión mejorada de apt. APT es un administrador de paquetes de nivel inferior y aptitude es un administrador de paquetes de alto nivel. Otra gran diferencia es la funcionalidad que ofrecen ambas herramientas. Aptitude ofrece una mejor funcionalidad en comparación con apt-get. Ambos son capaces de proporcionar los medios necesarios para realizar la gestión de paquetes. Sin embargo, si se busca un enfoque con más características, debería ser, Aptitude.
+
+### 6. What is AppArmor?
+Es un módulo de seguridad del kernel Linux que permite al administrador del sistema restringir las capacidades de un programa.
+
+### 7. What is LVM?
+Es un gestor de volúmenes lógicos. Proporciona un método para asignar espacio en dispositivos de almacenamiento masivo, que es más flexible que los esquemas de particionado convencionales para almacenar volúmenes.
