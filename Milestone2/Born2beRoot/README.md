@@ -100,3 +100,26 @@ For this project, **Debian** was chosen as the operating system.
 To connect securely from your host terminal to the virtual machine via port `4242`, use the following command:
 ```bash
 ssh username@127.0.0.1 -p 4242
+```
+
+### Monitoring Script Verification
+The custom monitoring script (`monitoring.sh`) broadcasts server metrics to all active terminals every 10 minutes. To test or execute it manually:
+
+```bash
+sudo /usr/local/bin/monitoring.sh
+```
+
+## 4. Resources & AI Usage
+
+### References & Documentation
+* [Official Debian Documentation](https://www.debian.org/doc/)
+* [OpenSSH Manual Pages](https://man.openbsd.org/sshd_config.5)
+* [LVM Administrator Guide (Red Hat / Linux Docs)](https://access.redhat.com/documentation/)
+* [UFW Essentials Guide](https://help.ubuntu.com/community/UFW)
+
+### AI Usage Statement
+During the development of this project, artificial intelligence (AI) was utilized as a guidance tool for:
+
+* **Debugging Networking & SSH Routing:** Understanding macOS loopback behaviors (`localhost` vs. `127.0.0.1`), resolving host-port conflicts, and troubleshooting VirtualBox NAT port-forwarding rules.
+* **Script Structuring:** Assisting with syntax patterns for parsing system metrics in the `monitoring.sh` script.
+* **Documentation & Formatting:** Organizing the README layout to strictly match the 42 curriculum criteria and formatting comparative tables cleanly in Markdown.
