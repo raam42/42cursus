@@ -43,30 +43,30 @@ The system uses LVM to organize partitions flexibly, separating critical mount p
 This section contains the core theoretical answers required during your Born2beRoot defense:
 
 ### 1. What is a Virtual Machine?
-Es un software que simula un sistema de computación y puede ejecutar programas como si fuese una computadora real. Permite crear múltiples entornos simulados o recursos dedicados desde un solo sistema de hardware físico.
+It is software that simulates a computer system and can execute programs as if it were a real computer. It allows you to create multiple simulated environments or dedicated resources from a single physical hardware system.
 
 ### 2. Why did you choose Debian?
-Esto es algo personal para cada uno, mi opinión: El propio subject explica que es más sencillo hacerlo en Debian y si buscas documentación/tutoriales hay muchos y todos se han hecho en Debian.
+This is a personal choice; in my opinion, the subject itself explains that it is simpler to do in Debian, and if you look for documentation/tutorials, there are many and almost all of them have been done in Debian.
 
 ### 3. Core Differences: Debian vs. Rocky Linux
 | Aspect | Debian | Rocky Linux |
 | :--- | :--- | :--- |
-| **Base** | Independiente | RHEL |
+| **Base** | Independent | RHEL |
 | **Package Manager** | APT (`.deb`) | DNF (`.rpm`) |
-| **Stability** | Flexible | Muy estable (empresas) |
-| **Lifecycle / Support** | 3-5 años | 10 años |
-| **Typical Use** | General | Servidores empresariales |
+| **Stability** | Flexible | Very stable (enterprise) |
+| **Lifecycle / Support** | 3-5 years | 10 years |
+| **Typical Use** | General | Enterprise servers |
 
-> **Resumen:** Debian es más versátil y comunitario. Rocky es una opción robusta y empresarial con soporte a largo plazo.
+> **Summary:** Debian is more versatile and community-driven. Rocky is a robust, enterprise-grade option with long-term support.
 
 ### 4. What is the purpose of Virtual Machines?
-Su objetivo es el de proporcionar un entorno de ejecución independiente de la plataforma de hardware y del sistema operativo, que oculte los detalles de la plataforma subyacente y permita que un programa se ejecute siempre de la misma forma sobre cualquier plataforma.
+Its goal is to provide an execution environment independent of the hardware platform and operating system, which conceals the details of the underlying platform and allows a program to run consistently on any platform.
 
 ### 5. Differences between `apt` and `aptitude`
-Aptitude es una versión mejorada de apt. APT es un administrador de paquetes de nivel inferior y aptitude es un administrador de paquetes de alto nivel. Otra gran diferencia es la funcionalidad que ofrecen ambas herramientas. Aptitude ofrece una mejor funcionalidad en comparación con apt-get. Ambos son capaces de proporcionar los medios necesarios para realizar la gestión de paquetes. Sin embargo, si se busca un enfoque con más características, debería ser, Aptitude.
+Aptitude is an enhanced version of apt. APT is a lower-level package manager and aptitude is a higher-level package manager. Another major difference is the functionality they offer. Aptitude provides better functionality compared to apt-get. Both are capable of providing the means necessary to perform package management. However, if a feature-rich approach is desired, it should be Aptitude.
 
 ### 6. What is AppArmor?
-Es un módulo de seguridad del kernel Linux que permite al administrador del sistema restringir las capacidades de un programa.
+It is a Linux kernel security module that allows the system administrator to restrict the capabilities of a program.
 
 ### 7. What is LVM?
-Es un gestor de volúmenes lógicos. Proporciona un método para asignar espacio en dispositivos de almacenamiento masivo, que es más flexible que los esquemas de particionado convencionales para almacenar volúmenes.
+It is a logical volume manager. It provides a method to allocate space on mass storage devices that is more flexible than conventional partitioning schemes for storing volumes.
