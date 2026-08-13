@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # *************************************************************************** #
 #                                                                             #
 #                                                        :::      ::::::::    #
@@ -18,5 +19,4 @@ if __name__ == "__main__":
     )
     print("=== Kaboom 0 ===\n"
           "Using grimoire module directly\n"
-          "Testing record light spell: ", end="")
-    print(record)
+          f"Testing record light spell: {record}")
