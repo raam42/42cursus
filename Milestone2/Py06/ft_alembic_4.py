@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # *************************************************************************** #
 #                                                                             #
 #                                                        :::      ::::::::    #
@@ -9,7 +10,6 @@
 #    Updated: 2026/07/24 18:55:41 by rodrigoa        ###   ########.fr        #
 #                                                                             #
 # *************************************************************************** #
-import sys
 import alchemy
 
 
@@ -20,5 +20,7 @@ if __name__ == "__main__":
           "Now show that not all functions can be reached\n"
           "This will raise an exception!\n"
           "Testing the hidden creat_earth: ", end="")
-    sys.stdout.flush()
-    print(f"{alchemy.create_earth()}")  # type: ignore[attr-defined]
+    try:
+        print(f"{alchemy.create_earth()}")  # type: ignore[attr-defined]
+    except AttributeError as e:
+        print(f"Attribute Error: {e}")
