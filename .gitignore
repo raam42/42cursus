@@ -1,4 +1,6 @@
+*.gitignore*
 *.o
 *.a
 *__pycache__*
-*.gitignore
+*.mypy_cache*
+
