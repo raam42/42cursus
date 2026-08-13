@@ -17,7 +17,6 @@ if __name__ == "__main__":
           "Acces to alchemy/grimoiredark_spellbook.py directly\n"
           "Test import now THIS WILL RAISE AN UNCAUGHT EXCEPTION")
     try:
-       from alchemy.grimoire.dark_spellbook import dark_spell_record  # noqa: F401
+        from alchemy.grimoire import dsr  # noqa: F401
     except Exception as e:
         print(f"Exception catched: {e}")
-        
