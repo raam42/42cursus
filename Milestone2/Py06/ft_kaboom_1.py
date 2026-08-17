@@ -19,4 +19,4 @@ if __name__ == "__main__":
     try:
         from alchemy.grimoire import dsr  # noqa: F401
     except Exception as e:
-        print(f"Exception catched: {e}")
+        print(f"Circular Import: {e}")
