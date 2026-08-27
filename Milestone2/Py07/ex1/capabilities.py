@@ -1,28 +1,28 @@
-import abc
+from abc import ABC, abstractmethod
 
 
-class HealCapability(abc.ABC):
+class HealCapability(ABC):
     """Abstract capability for healing mechanics."""
     
-    @abc.abstractmethod
+    @abstractmethod
     def heal(self, target: str = "") -> str:
         """Heals the creature or a specified target."""
         pass
 
 
-class TransformCapability(abc.ABC):
+class TransformCapability(ABC):
     """Abstract capability for transformation mechanics."""
     
     def __init__(self) -> None:
         """Initializes the persistent state attribute."""
         self.is_transformed: bool = False
 
-    @abc.abstractmethod
+    @abstractmethod
     def transform(self) -> str:
         """Triggers the transformation state."""
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def revert(self) -> str:
         """Reverts the transformation state."""
         pass

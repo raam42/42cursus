@@ -1,17 +1,16 @@
-from ex0.base import Creature, CreatureFactory
-from .capabilities import HealCapability
+from ex0.creature import Creature, CreatureFactory
+from .capabilities import HealCapability, TransformCapability
 
 
 class Sproutling(Creature, HealCapability):
     def __init__(self) -> None:
-        Creature.__init__(self, "Sproutling", "Grass")
-        HealCapability.__init__(self)
+        super().__init__("Sproutling", "Grass")
 
     def attack(self) -> str:
-        return "Sproutling uses Vine Whip!"
+        return f"{self.name} uses Vine Whip!"
 
     def heal(self, target: str = "") -> str:
-        return "Sproutling heals itself for a small amount"
+        return f"{self.name} heals itself for a small amount"
 
 
 class Bloomelle(Creature, HealCapability):
