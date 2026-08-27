@@ -1,23 +1,19 @@
-import abc
-from ex0.base import Creature
+from abc import ABC, abstractmethod
+from ex0.creature import Creature
 from ex1.capabilities import TransformCapability, HealCapability
+from .exceptions import InvalidStrategyError
 
 
-class InvalidStrategyError(Exception):
-    """Custom exception raised when a strategy is paired with an incompatible creature."""
-    pass
-
-
-class BattleStrategy(abc.ABC):
+class BattleStrategy(ABC):
     """Abstract strategy defining tournament battle behavior."""
 
-    @abc.abstractmethod
+    @abstractmethod
     def is_valid(self, creature: Creature) -> bool:
         """Checks if the creature possesses the necessary capabilities for this strategy."""
         pass
 
-    @abc.abstractmethod
-    def act(self, creature: Creature) -> None:
+    @abstractmethod
+    def act(self, creature: Creature) -> str:
         """Executes the strategy's combat sequence."""
         pass
 
@@ -30,9 +26,10 @@ class NormalStrategy(BattleStrategy):
 
     def act(self, creature: Creature) -> None:
         if not self.is_valid(creature):
-            raise InvalidStrategyError(f"Invalid Creature '{creature.name}' for this normal strategy")
-        
-        print(creature.attack())
+            raise InvalidStrategyError(
+                f"Invalid Creature '{creature.name}' for this normal strategy"
+            )
+        return(creature.attack())
 
 
 class AggressiveStrategy(BattleStrategy):
@@ -41,9 +38,11 @@ class AggressiveStrategy(BattleStrategy):
     def is_valid(self, creature: Creature) -> bool:
         return isinstance(creature, TransformCapability)
 
-    def act(self, creature: Creature) -> None:
+    def act(self, creature: Creature) -> str:
         if not self.is_valid(creature):
-            raise InvalidStrategyError(f"Invalid Creature '{creature.name}' for this aggressive strategy")
+            raise InvalidStrategyError(
+                f"Invalid Creature '{creature.name}' "
+                "for this aggressive strategy")
             
         # The isinstance check here satisfies mypy by type-narrowing the creature
         if isinstance(creature, TransformCapability):
