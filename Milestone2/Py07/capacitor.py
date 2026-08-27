@@ -10,7 +10,7 @@ from ex1 import (
 def test_healing_creatures() -> None:
     """Tests the full lifecycle of a healing capability creature."""
     try:
-        print("Testing Creature with healing capability\nbase:")
+        print("Testing Creature with healing capability\nbase: ")
         factory = HealingCreatureFactory()
         
         base = factory.create_base()
