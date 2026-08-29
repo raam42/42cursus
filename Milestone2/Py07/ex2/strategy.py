@@ -9,7 +9,10 @@ class BattleStrategy(ABC):
 
     @abstractmethod
     def is_valid(self, creature: Creature) -> bool:
-        """Checks if the creature possesses the necessary capabilities for this strategy."""
+        """
+        Checks if the creature possesses 
+        the necessary capabilities for this strategy.
+        """
         pass
 
     @abstractmethod
@@ -24,7 +27,7 @@ class NormalStrategy(BattleStrategy):
     def is_valid(self, creature: Creature) -> bool:
         return True
 
-    def act(self, creature: Creature) -> None:
+    def act(self, creature: Creature) -> str:
         if not self.is_valid(creature):
             raise InvalidStrategyError(
                 f"Invalid Creature '{creature.name}' for this normal strategy"
@@ -43,6 +46,12 @@ class AggressiveStrategy(BattleStrategy):
             raise InvalidStrategyError(
                 f"Invalid Creature '{creature.name}' "
                 "for this aggressive strategy")
+
+        assert isinstance(creature, TransformCapability)
+
+        actions = [
+            
+        ]
             
         # The isinstance check here satisfies mypy by type-narrowing the creature
         if isinstance(creature, TransformCapability):
@@ -59,7 +68,9 @@ class DefensiveStrategy(BattleStrategy):
 
     def act(self, creature: Creature) -> None:
         if not self.is_valid(creature):
-            raise InvalidStrategyError(f"Invalid Creature '{creature.name}' for this defensive strategy")
+            raise InvalidStrategyError(
+                f"Invalid Creature '{creature.name}' "
+                "for this defensive strategy")
             
         if isinstance(creature, HealCapability):
             print(creature.attack())
