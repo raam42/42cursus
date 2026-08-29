@@ -1,10 +1,10 @@
 from .factory import (
-    HealingCreatureFactory, TransformCreatureFactory,
-    HealingCapability, TransformCapability)
+    HealingCreatureFactory, TransformCreatureFactory)
+from .capabilities import (HealCapability, TransformCapability)
 
 __all__ = [
     "HealingCreatureFactory",
     "TransformCreatureFactory",
-    HealingCapability,
+    HealCapability,
     TransformCapability
 ]

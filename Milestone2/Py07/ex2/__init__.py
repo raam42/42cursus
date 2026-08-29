@@ -3,8 +3,8 @@ from .strategy import (
     NormalStrategy,
     AggressiveStrategy,
     DefensiveStrategy,
-    InvalidStrategyError
 )
+from .exceptions import InvalidStrategyError
 
 __all__ = [
     "BattleStrategy",

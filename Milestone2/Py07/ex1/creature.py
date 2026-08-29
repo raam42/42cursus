@@ -1,4 +1,4 @@
-from ex0.creature import Creature, CreatureFactory
+from ex0.creature import Creature
 from .capabilities import HealCapability, TransformCapability
 
 
@@ -26,7 +26,7 @@ class Bloomelle(Creature, HealCapability):
     def heal(self, target: str = "") -> str:
         if target:
             return f"{self.name} heals {target} and others for a large amount" 
-        return "{self.name} heals itself and others for a large amount"
+        return f"{self.name} heals itself and others for a large amount"
 
 
 class Shiftling(Creature, TransformCapability):

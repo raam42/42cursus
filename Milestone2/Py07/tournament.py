@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import itertools
-from ex0 import CreatureFactory, FlameFactory, AquaFactory
+from typing import List,  Tuple
+from ex0.factory import CreatureFactory, FlameFactory, AquaFactory
 from ex1 import HealingCreatureFactory, TransformCreatureFactory
 from ex2 import (
     BattleStrategy,
@@ -11,15 +12,15 @@ from ex2 import (
 )
 
 
-def run_tournament(
+def battle(
     opponents: list[tuple[CreatureFactory, BattleStrategy]]
 ) -> None:
     """
     Executes a round-robin tournament for a given list of opponents.
     Each opponent is a tuple containing their factory and strategy.
     """
-    print("*** Tournament ***")
-    print(f"{len(opponents)} opponents involved")
+    print("*** Tournament ***\n"
+          f"{len(opponents)} opponents involved")
 
     try:
         # itertools.combinations perfectly generates unique 1-on-1 matchups
@@ -35,13 +36,13 @@ def run_tournament(
             contender_two = factory_two.create_base()
 
             print(contender_one.describe())
-            print("VS.")
+            print("vs.")
             print(contender_two.describe())
             print("now fight!")
 
             # Execute the combat sequence
-            strategy_one.act(contender_one)
-            strategy_two.act(contender_two)
+            print(strategy_one.act(contender_one))
+            print(strategy_two.act(contender_two))
 
     except InvalidStrategyError as e:
         # FQA Safeguard: Catches invalid pairings and gracefully aborts
@@ -66,15 +67,15 @@ if __name__ == "__main__":
     # 3. Execute the test scenarios
     print("Tournament 0 (basic)\n"
           "[(Flameling+Normal), (Healing+Defensive)]")
-    run_tournament([(flame, normal), (healing, defensive)])
+    battle([(flame, normal), (healing, defensive)])
 
     print("\nTournament 1 (error)\n"
           "[(Flameling+Aggressive), (Healing+Defensive)]")
-    run_tournament([(flame, aggressive), (healing, defensive)])
+    battle([(flame, aggressive), (healing, defensive)])
 
     print("\nTournament 2 (multiple)\n"
           "[(Aquabub+Normal), (Healing+Defensive), (Transform+Aggressive)]")
-    run_tournament([
+    battle([
         (aqua, normal), 
         (healing, defensive), 
         (transform, aggressive)
