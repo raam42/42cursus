@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
+# *************************************************************************** #
+#                                                                             #
+#                                                        :::      ::::::::    #
+#    tournament.py                                     :+:      :+:    :+:    #
+#                                                    +:+ +:+         +:+      #
+#    By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+         #
+#                                                +#+#+#+#+#+   +#+            #
+#    Created: 2026/08/29 16:56:40 by rodrigoa         #+#    #+#              #
+#    Updated: 2026/08/29 16:56:40 by rodrigoa        ###   ########.fr        #
+#                                                                             #
+# *************************************************************************** #
 import itertools
-from typing import List,  Tuple
+from typing import List, Tuple
 from ex0.factory import CreatureFactory, FlameFactory, AquaFactory
 from ex1 import HealingCreatureFactory, TransformCreatureFactory
 from ex2 import (
@@ -13,7 +24,7 @@ from ex2 import (
 
 
 def battle(
-    opponents: list[tuple[CreatureFactory, BattleStrategy]]
+    opponents: List[Tuple[CreatureFactory, BattleStrategy]]
 ) -> None:
     """
     Executes a round-robin tournament for a given list of opponents.
@@ -23,48 +34,39 @@ def battle(
           f"{len(opponents)} opponents involved")
 
     try:
-        # itertools.combinations perfectly generates unique 1-on-1 matchups
         for p1, p2 in itertools.combinations(opponents, 2):
             print("* Battle *")
 
-            # Extract factories and strategies from the tuples
             factory_one, strategy_one = p1
             factory_two, strategy_two = p2
 
-            # Spawn the base tier contenders
             contender_one = factory_one.create_base()
             contender_two = factory_two.create_base()
 
-            print(contender_one.describe())
-            print("vs.")
-            print(contender_two.describe())
-            print("now fight!")
+            print(contender_one.describe(),
+                  "vs.",
+                  contender_two.describe(),
+                  "now fight!")
 
-            # Execute the combat sequence
-            print(strategy_one.act(contender_one))
-            print(strategy_two.act(contender_two))
+            print(strategy_one.act(contender_one),
+                  strategy_two.act(contender_two))
 
     except InvalidStrategyError as e:
-        # FQA Safeguard: Catches invalid pairings and gracefully aborts
         print(f"Battle error, aborting tournament: {e}")
     except Exception as e:
-        # Catch-all for any unexpected runtime crashes
         print(f"Unexpected error: {e}")
 
 
 if __name__ == "__main__":
-    # 1. Spin up the factories (The Asset Pipelines)
     flame = FlameFactory()
     aqua = AquaFactory()
     healing = HealingCreatureFactory()
     transform = TransformCreatureFactory()
 
-    # 2. Instantiate the strategies (The AI Behaviors)
     normal = NormalStrategy()
     aggressive = AggressiveStrategy()
     defensive = DefensiveStrategy()
 
-    # 3. Execute the test scenarios
     print("Tournament 0 (basic)\n"
           "[(Flameling+Normal), (Healing+Defensive)]")
     battle([(flame, normal), (healing, defensive)])
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     print("\nTournament 2 (multiple)\n"
           "[(Aquabub+Normal), (Healing+Defensive), (Transform+Aggressive)]")
     battle([
-        (aqua, normal), 
-        (healing, defensive), 
+        (aqua, normal),
+        (healing, defensive),
         (transform, aggressive)
     ])
