@@ -18,17 +18,15 @@ def check_dependencies() -> bool:
             missing_packages.append(dep)
             
     if missing_packages:
-        print("\nWARNING: Missing dependencies detected!")
-        print("To install using pip:")
-        print("  pip install -r requirements.txt")
-        print("To install using Poetry:")
-        print("  poetry install")
+        print("\nWARNING: Missing dependencies detected\n"
+              "To install using pip: pip install -r requirements.txt\n"
+              "To install using Poetry: poetry install")
         return False
         
-    print("\nData manipulation ready")
-    print("Numerical computation ready")
-    print("Network access ready")
-    print("Visualization ready\n")
+    print("\nData manipulation ready\n"
+          "Numerical computation ready\n"
+          "Network access ready\n"
+          "Visualization ready\n")
     return True
 
 
@@ -36,12 +34,12 @@ def run_analysis() -> None:
     """Executes the data generation and visualization."""
     # We only import these locally after confirming they are installed
     # Note: The subject allows flake8/mypy errors for these specific imports
-    import numpy as np
-    import pandas as pd
-    import matplotlib.pyplot as plt
+    import numpy as np    #type: ignore # noqa
+    import pandas as pd    #type: ignore # noqa
+    import matplotlib.pyplot as plt    #type: ignore # noqa
 
-    print("Analyzing Matrix data...")
-    print("Processing 1000 data points...")
+    print("Analyzing Matrix data...\n"
+          "Processing 1000 data points...")
     
     # Generate simulated Matrix data using numpy
     matrix_data = np.random.rand(1000, 2)
@@ -55,8 +53,8 @@ def run_analysis() -> None:
     plt.title('Matrix Data Stream Analysis')
     plt.savefig('matrix_analysis.png')
     
-    print("Analysis complete!")
-    print("Results saved to: matrix_analysis.png")
+    print("Analysis complete!\n"
+          "Results saved to: matrix_analysis.png")
 
 
 def main() -> None:
