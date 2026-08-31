@@ -49,6 +49,7 @@ def run_analysis() -> None:
     print("Generating visualization...")
     output_file = 'matrix_analysis.png'
     # Create and save the plot
+    plt.style.use('dark_background')
     plt.figure(figsize=(8, 6))
     plt.scatter(df['Signal_X'], df['Signal_Y'], alpha=0.7, color='#00FF41')
     plt.title('Matrix Data Stream Analysis')
