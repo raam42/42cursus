@@ -13,16 +13,16 @@ def is_virtual_env() -> bool:
 
 def print_global_warning() -> None:
     """Prints the warning message for the global environment."""
-    print("MATRIX STATUS: You're still plugged in\n"
-          f"Current Python: {sys.executable}\n"
+    print("\nMATRIX STATUS: You're still plugged in\n"
+          f"\nCurrent Python: {sys.executable}\n"
           "Virtual Environment: None detected\n"
-          "WARNING: You're in the global environment!\n"
+          "\nWARNING: You're in the global environment!\n"
           "The machines can see everything you install.\n"
-          "To enter the construct, run:\n"
+          "\nTo enter the construct, run:\n"
           "python -m venv matrix_env\n"
           "source matrix_env/bin/activate  # On Unix\n"
           "matrix_env\\Scripts\\activate     # On Windows\n"
-          "Then run this program again.")
+          "\nThen run this program again.")
 
 
 def print_construct_success() -> None:
@@ -40,13 +40,13 @@ def print_construct_success() -> None:
             'site-packages'
         )
 
-    print("MATRIX STATUS: Welcome to the construct\n"
-          f"Current Python: {sys.executable}\n"
+    print("\nMATRIX STATUS: Welcome to the construct\n"
+          f"\nCurrent Python: {sys.executable}\n"
           f"Virtual Environment: {venv_name}\n"
           f"Environment Path: {sys.prefix}\n"
-          "SUCCESS: You're in an isolated environment!\n"
-          "Safe to install packages without affecting the global system.\n"
-          f"Package installation path: {packages_path}")
+          "\nSUCCESS: You're in an isolated environment!\n"
+          "Safe to install packages without affecting\nthe global system.\n"
+          f"\nPackage installation path:\n{packages_path}")
 
 
 def main() -> None:
