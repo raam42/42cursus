@@ -4,12 +4,11 @@ import importlib.metadata
 
 def check_dependencies() -> bool:
     """Checks for required packages and prints their status."""
-    print("LOADING STATUS: Loading programs.\nChecking dependencies:")
+    print("LOADING STATUS: Loading programs.\n\nChecking dependencies:")
     
     dependencies = {
         'pandas': 'Data manipulation ready',
         'numpy': 'Numerical computation ready',
-        'requests': 'Network access ready',
         'matplotlib': 'Visualization ready'
     }
     missing_packages = []
@@ -51,7 +50,13 @@ def run_analysis() -> None:
     # Create and save the plot
     plt.style.use('dark_background')
     plt.figure(figsize=(8, 6))
-    plt.scatter(df['Signal_X'], df['Signal_Y'], alpha=0.7, color='#00FF41')
+    plt.scatter(
+        df['Signal_X'],
+        df['Signal_Y'],
+        alpha=0.8,
+        c=df['Signal_Y'],
+        cmap='plasma'
+    )
     plt.title('Matrix Data Stream Analysis')
     plt.savefig(output_file)
     
