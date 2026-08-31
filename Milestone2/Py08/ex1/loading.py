@@ -6,14 +6,19 @@ def check_dependencies() -> bool:
     """Checks for required packages and prints their status."""
     print("LOADING STATUS: Loading programs.\nChecking dependencies:")
     
-    dependencies = ['pandas', 'numpy', 'requests', 'matplotlib']
+    dependencies = {
+        'pandas': 'Data manipulation ready',
+        'numpy': 'Numerical computation ready',
+        'requests': 'Network access ready',
+        'matplotlib': 'Visualization ready'
+    }
     missing_packages = []
     
-    for dep in dependencies:
+    for dep, action in dependencies.items():
         try:
             # metadata.version cleanly gets the version string if installed
             version = importlib.metadata.version(dep)
-            print(f"[OK] {dep} ({version})")
+            print(f"[OK] {dep} ({version}) - {action}")
         except importlib.metadata.PackageNotFoundError:
             missing_packages.append(dep)
             
@@ -22,11 +27,7 @@ def check_dependencies() -> bool:
               "To install using pip: pip install -r requirements.txt\n"
               "To install using Poetry: poetry install")
         return False
-        
-    print("\nData manipulation ready\n"
-          "Numerical computation ready\n"
-          "Network access ready\n"
-          "Visualization ready\n")
+
     return True
 
 
@@ -38,7 +39,7 @@ def run_analysis() -> None:
     import pandas as pd    #type: ignore # noqa
     import matplotlib.pyplot as plt    #type: ignore # noqa
 
-    print("Analyzing Matrix data...\n"
+    print("\nAnalyzing Matrix data...\n"
           "Processing 1000 data points...")
     
     # Generate simulated Matrix data using numpy
@@ -46,15 +47,15 @@ def run_analysis() -> None:
     df = pd.DataFrame(matrix_data, columns=['Signal_X', 'Signal_Y'])
     
     print("Generating visualization...")
-    
+    output_file = 'matrix_analysis.png'
     # Create and save the plot
     plt.figure(figsize=(8, 6))
-    plt.scatter(df['Signal_X'], df['Signal_Y'], alpha=0.5, color='0.2')
+    plt.scatter(df['Signal_X'], df['Signal_Y'], alpha=0.7, color='#00FF41')
     plt.title('Matrix Data Stream Analysis')
-    plt.savefig('matrix_analysis.png')
+    plt.savefig(output_file)
     
     print("Analysis complete!\n"
-          "Results saved to: matrix_analysis.png")
+          f"Results saved to: {output_file}")
 
 
 def main() -> None:

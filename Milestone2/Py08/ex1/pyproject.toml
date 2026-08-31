@@ -3,6 +3,9 @@ name = "matrix-loading"
 version = "0.1.0"
 description = "Loading programs for the Matrix"
 authors = ["Rodrigo Aguilar <rodrigoa@student.42madrid.com>"]
+packages = [
+    { include = "loading.py"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
