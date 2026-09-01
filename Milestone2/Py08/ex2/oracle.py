@@ -67,13 +67,27 @@ def main() -> None:
     
     # Demonstrate the difference between development and production environments
     if mode == "development":
-        print("Database: Connected to local instance")
-        print("API Access: Authenticated (Sandbox)")
+        print("Database: Connected to local instance\n"
+              f"Log Level: {log_level}")
     elif mode == "production":
-        print("Database: Connected to production cluster")
-        print("API Access: Authenticated (Live)")
-        
-    print(f"Log Level: {log_level}")
+        print("Database: Connected to production cluster\n"
+              f"Log Level: {log_level}")
+    if api_key and api_base_url:
+        try:
+            api_url = f"{api_base_url}?api_key={api_key}"
+            urllib.request.urlopen(api_url, timeout=3)
+            print("API Access: [AUTHENTICATED]")
+        except urllib.error.HTTPError as e:
+            if e.code == 403:
+                print("API Access: [DENIED]")
+            else:
+                print(f"API Access: [ERROR] (HTTP Status {e.code})")
+        except urllib.error.URLError as e:
+            print(f"API Access: [OFFLINE] (Network error: {e.reason})")
+    else:
+        print("API Access: [DENIED] - Missing Connfiguration")
+    
+
     if zion:
         try:
             # Send a GET request with a 3-second timeout so the script doesn't hang
