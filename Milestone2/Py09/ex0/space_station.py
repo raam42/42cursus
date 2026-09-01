@@ -37,7 +37,7 @@ def test_station_build(data: dict[str, Any]) -> None:
         print("Expected validation error:")
         for error in e.errors():
             print(error['msg'])
-    print("-" * 30)
+    print("=" * 42)
 
 
 def main() -> None:
