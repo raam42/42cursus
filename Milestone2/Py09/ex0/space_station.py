@@ -1,3 +1,5 @@
+import json
+import os
 from datetime import datetime
 from typing import Any
 from pydantic import BaseModel, Field, ValidationError
@@ -31,40 +33,39 @@ class SpaceStation(BaseModel):
 def test_station_build(data: dict[str, Any]) -> None:
     try:
         station = SpaceStation(**data)
-        print("Valid station created:\n",
-              station)
+        print("Valid station created:\n"
+              f"{station}")
     except ValidationError as e:
         print("Expected validation error:")
         for error in e.errors():
-            print(error['msg'])
+            print(f"- Field '{error['loc'][0]}': {error['msg']}")
     print("=" * 42)
+
+
+def load_json_data(filepath: str) -> list[dict[str, Any]]:
+    if not os.path.exists(filepath):
+        print(f"[ERROR] Could not find '{filepath}'.\n"
+              "Please run <<python3 .tools/data_exporter.py>> first.\n")
+        return []
+    with open(filepath, 'r', encoding='utf-8') as file:
+        return json.load(file)
 
 
 def main() -> None:
     print("         Space Station Data Validaton            \n"
           "===================================================")
-    test_cases = [
-        {
-            "station_id": "IS001",
-            "name": "International Space Station",
-            "crew_size": 6,
-            "power_level": 85.5,
-            "oxygen_level": 92.3,
-            "last_maintenance": "2026-09-01T10:04:00",
-            "is_operational": True,
-            "notes": "Routine operations nominal."
-        },
-        {
-            "station_id": "IS",
-            "name": "Deep Space Nine",
-            "crew_size": 25,
-            "power_level": 105,
-            "oxygen_level": 92.3,
-            "last_maintenance": "2026-09-01T10:04:00"
-        }
-    ]
-    for test in test_cases:
-        test_station_build(test)
+    valid_file = 'generated_data/space_stations.json'
+    invalid_file = 'generated_data/invalid_stations.json'
+
+    valid_stations = load_json_data(valid_file)
+    invalid_stations = load_json_data(invalid_file)
+
+    if valid_stations:
+        for data in valid_stations:
+            test_station_build(data)
+    if invalid_stations:
+        for data in invalid_stations:
+            test_station_build(data)
 
 
 if __name__ == "__main__":
