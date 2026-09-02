@@ -1,3 +1,5 @@
+import json
+import os
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -45,8 +47,7 @@ class AlienContact(BaseModel):
         )
 
 
-def test_contact(data: dict[str, Any], test_name: str) -> None:
-    print(f"--- Running test: {test_name} ---")
+def test_contact(data: dict[str, Any]) -> None:
     try:
         contact = AlienContact(**data)
         print("Valid contact report:\n"
@@ -54,59 +55,36 @@ def test_contact(data: dict[str, Any], test_name: str) -> None:
     except ValidationError as e:
         print("Expected validation error:")
         for error in e.errors():
-            print(f"- {error['msg']}")
+            print(f"- {error['msg']}\n")
     print("=" * 42 + "\n")
+
+
+def load_json_data(filepath: str) -> list[dict[str, Any]]:
+    if not os.path.exists(filepath):
+        print(f"[ERROR] Could not find '{filepath}'.\n"
+              "Please run <<python3 tools/py09_data_exporter.py>> first.\n")
+        return []
+    with open(filepath, 'r', encoding='utf-8') as file:
+        return json.load(file)
 
 
 def main() -> None:
     print("      Alien Contact Log Validation      \n",
-          ("=" * 38))
-    valid_radio = {
-        "contact_id": "AC_2024_001",
-        "timestamp": "2026-09-01T23:00:00",
-        "location": "Area 51, Nevada",
-        "contact_type": "radio",
-        "signal_strength": 3.5,
-        "duration_minutes": 45,
-        "witness_count": 5,
-        "message_received": "Greetings from Zeta Reticuli",
-        "is_verified": True
-    }
+          ("=" * 38 + "\n"))
 
-    invalid_id = valid_radio.copy()
-    invalid_id["contact_id"] = "UFO_2024_001"
+    valid_file = 'generated_data/alien_contacts.json'
+    invalid_file = 'generated_data/invalid_contacts.json'
 
-    invalid_physical = valid_radio.copy()
-    invalid_physical.update({
-        "contact_id": "AC_2024_002",
-        "contact_type": "physical",
-        "is_verified": False
-    })
+    valid_contacts = load_json_data(valid_file)
+    invalid_contacts = load_json_data(invalid_file)
 
-    invalid_telepathic = valid_radio.copy()
-    invalid_telepathic.update({
-        "contact_id": "AC_2024_003",
-        "contact_type": "telepathic",
-        "witness_count": 2
-    })
+    if valid_contacts:
+        for data in valid_contacts:
+            test_contact(data)
 
-    invalid_signal = valid_radio.copy()
-    invalid_signal.update({
-        "contact_id": "AC_2024_004",
-        "signal_strength": 8.5,
-        "message_received": None
-    })
-
-    test_suite = {
-        "Happy Path": valid_radio,
-        "ID Format Trap": invalid_id,
-        "Physical Verification Trap": invalid_physical,
-        "Telepathic Witness Trap": invalid_telepathic,
-        "Strong Signal Trap": invalid_signal
-    }
-
-    for name, data in test_suite.items():
-        test_contact(data, name)
+    if invalid_contacts:
+        for data in invalid_contacts:
+            test_contact(data)
 
 
 if __name__ == "__main__":
