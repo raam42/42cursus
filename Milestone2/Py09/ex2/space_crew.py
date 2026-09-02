@@ -1,3 +1,5 @@
+import json
+import os
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -72,7 +74,8 @@ class SpaceMission(BaseModel):
         )
 
 
-def test_mission(data: dict[str, Any], test_name: str) -> None:
+def test_mission(data: dict[str, Any], test_name: str = "Batch Mission"
+                 ) -> None:
     print(f"--- Running Test: {test_name} ---")
     try:
         mission = SpaceMission(**data)
@@ -81,15 +84,33 @@ def test_mission(data: dict[str, Any], test_name: str) -> None:
     except ValidationError as e:
         print("Expected validation error:")
         for error in e.errors():
-            print(f"- {error['msg']}")
-        print()
+            if error['loc']:
+                loc_path = " -> ".join(str(loc) for loc in error['loc'])
+                print(f"- [{loc_path}]: {error['msg']}\n")
+            else:
+                print(f"- [Mission Rule]: {error['msg']}\n")
     print("=" * 42 + "\n")
 
 
+def load_json_data(filepath: str) -> list[dict[str, Any]]:
+    if not os.path.exists(filepath):
+        print(f"[ERROR] Could not find '{filepath}'.\n"
+              "Please run <<python3 .tools/data_exporter.py>> first.\n")
+        return []
+    with open(filepath, 'r', encoding='utf-8') as file:
+        return json.load(file)
+
+
 def main() -> None:
-    """Runs the Space Mission automated validation suite."""
     print("      Space Mission Crew Validation      \n",
-          ("=" * 42))
+          ("=" * 42 + "\n"))
+
+    valid_file = 'generated_data/space_missions.json'
+    valid_missions = load_json_data(valid_file)
+
+    if valid_missions:
+        for i, data in enumerate(valid_missions, start=1):
+            test_mission(data, test_name=f"JSON Generated Mission #{i}")
 
     # 1. Define the raw data for individual crew members
     commander_sarah = {
@@ -169,16 +190,16 @@ def main() -> None:
 
     # Bundle the tests in a dictionary
     test_suite = {
-        "Happy Path (Valid Mission)": valid_mission,
         "Mission ID Trap": invalid_id_mission,
         "No Leader Trap": no_leader_mission,
         "Experience Ratio Trap": inexperienced_mission,
         "Inactive Crew Trap": inactive_mission
     }
 
+
     # Execute the test suite
     for name, data in test_suite.items():
-        test_mission(data, name)
+        test_mission(data, test_name=name)
 
 
 if __name__ == "__main__":
