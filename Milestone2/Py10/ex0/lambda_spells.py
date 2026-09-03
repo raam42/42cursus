@@ -3,10 +3,11 @@ from typing import Any
 
 
 try:
-    from data_generator import FuncMagDataGenerator    #type:  ignore
-except ImportError:
+    from data_generator import FuncMageDataGenerator    #type:  ignore
+except ImportError as e:
     print("[ERROR] Could not import 'data_generator.py'.\n"
-          "Please ensure the file is extracted and in the same directory.")
+          "Please ensure the file is extracted and in the same directory.\n"
+          f"{e}")
     sys.exit(1)
 
 
@@ -22,12 +23,12 @@ def power_filter(mages: list[dict[str, Any]], min_power: int
     return list(filter(lambda mage: mage['power'] >= min_power, mages))
 
 
-def spell_transformer(spells: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def spell_transformer(spells: list[str]) -> list[str]:
     """Adds a '*' prefix and ' *' suffix to a list of spell names."""
     return list(map(lambda spell: f"*{spell} *", spells))
 
 
-def mage_stats(mages: list[dict]) -> dict:
+def mage_stats(mages: list[dict[str, Any]]) -> dict[str, Any]:
    """Calculates max, min, and average power for a list of mages."""
    if not mages:
        return {'max_power': 0, 'min_power': 0, 'avg_power': 0.0}
@@ -46,10 +47,10 @@ def mage_stats(mages: list[dict]) -> dict:
 
 
 def main() -> None:
-    print("      Lambda Sanctum QA Test Runner      \n"
-          ("=" * 42 + "\n"))
+    print("      Lambda Sanctum QA Test Runner      \n",
+          ("=" * 42))
 
-    generator = FuncMagDataGenerator()
+    generator = FuncMageDataGenerator()
     artifacts = generator.generate_artifacts(4)
     mages = generator.generate_mages(5)
     spells = generator.generate_spells(4)
@@ -80,9 +81,9 @@ def main() -> None:
     # 5. Test Mage Stats
     print("\nTesting mage stats...")
     stats = mage_stats(mages)
-    print(f"Max Power: {stats['max_power']}")
-    print(f"Min Power: {stats['min_power']}")
-    print(f"Avg Power: {stats['avg_power']}")
+    print(f"Max Power: {stats['max_power']}\n"
+          f"Min Power: {stats['min_power']}\n"
+          f"Avg Power: {stats['avg_power']}\n")
 
 
 if __name__ == "__main__":
