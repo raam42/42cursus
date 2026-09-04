@@ -59,15 +59,17 @@ def retry_spell(max_attempts: int) -> Callable:
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            last_err_mssg = ""
+
             for attempt in range(1, max_attempts + 1):
                 try:
                     return func(*args, **kwargs)
-                except Exception:
+                except Exception as e:
+                    last_err_mssg = str(e)
                     if attempt < max_attempts:
                         print(f"Spell failed, retrying... (attempt {attempt}/{max_attempts})")
-            
             return (f"Spell casting failed after {max_attempts} attempts"
-                    "\nWaaaaaagh spelled !")
+                    f"\n{last_err_mssg}")
         return wrapper
     return decorator
 
@@ -91,7 +93,7 @@ def fireball() -> str:
 
 @retry_spell(max_attempts=3)
 def unstable_spell() -> str:
-    raise RuntimeError("Critical magical failure!")
+    raise RuntimeError("Waaaaaaagh spelled !")
 
 
 def main() -> None:
@@ -119,8 +121,8 @@ def main() -> None:
           f" {MageGuild.validate_mage_name(test_valid)}\n"
           f"Is '{test_invalid}' valid?"
           f" {MageGuild.validate_mage_name(test_invalid)}\n"
-          f"{guild.cast_spell("Lightning", 15)}\n"
-          f"{guild.cast_spell("Lightning", 5)}")
+          f"{guild.cast_spell('Lightning', 15)}\n"
+          f"{guild.cast_spell('Lightning', 5)}")
 
 
 if __name__ == "__main__":
