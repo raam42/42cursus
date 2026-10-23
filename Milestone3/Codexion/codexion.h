@@ -57,5 +57,43 @@ typedef struct  s_coder
 
 struct  s_hub
 {
-    
-}
+    int num_coders;
+    long    time_to_burn;
+    long    time_to_comp;
+    long    time_to_deb;
+    long    time_ti_ref;
+    int req_comp;
+    long    d_cooldown;
+    t_scheduler scheduler;
+
+    long    strt_time;
+    int sim_active;
+
+    pthread_mutex_t write_lock;
+    pthread_mutex_t state_lock;
+
+    t_dongle    *dongles;
+    t_coder *coders;
+};
+
+
+void    swap_requests(t_requests    *a, t_request   *b);
+void    push_to_heapp(t_pqueue  *q, int coder_id, long  priority_score);
+void    pop_from_heap(t_pqueue  *q);
+
+long    get_time_ms(void);
+void    smart_sleep(t_hub   *hub, long  duration_ms);
+void    print_state(t_hub   *hub, int   id, char    *state);
+int is_num_str(const char   *str);
+
+void    *coder_routine(void *arg);
+void    acq_single_d(t_coder    *coder, t_dongle    *dongle);
+void    rel_single_d(t_coder   *coder, t_dongle    *dongle);
+
+void    *monitor_routine(void   *arg);
+void    wake_all(t_hub  *hub);
+
+int val_args(int    argc, char  **argv);
+int init_hub(t_hub  *hub, int   argc, char  **argv);
+
+#endif
