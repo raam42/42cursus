@@ -25,7 +25,7 @@ int is_num_str(const char   *str)
 
 int val_args(int    argc, char  **argv)
 {
-    int i;
+    int i = 1;
 
 
     if (argc != 9)
@@ -33,9 +33,6 @@ int val_args(int    argc, char  **argv)
         printf ("Error: Codexion requires exactly 8 arguments.\n");
         return (0);
     }
-
-    i = 1;
-
 
     while (i <= 7)
     {

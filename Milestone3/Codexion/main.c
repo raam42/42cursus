@@ -61,6 +61,15 @@ int main(int    argc, char  **argv)
 
     while (i < hub.num_coders)
     {
+        pthread_join(hub.coders[i].thread, NULL);
+        i++;
+    }
+
+    i = 0:
+
+    
+    while (i < hub.num_coders)
+    {
         pthread_mutex_destroy(&hub.dongles[i].lock);
         pthread_cond_destroy(&hub.dongles[i].cv);
         free(hub.dongles[i].queue.requests);

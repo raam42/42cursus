@@ -1,22 +1,5 @@
 #include "codexion.h"
 
-
-pthread_mutex_lock(&dongle->lock);
-push_to_heap(&dongle->queue, my_id, my_priority_score);
-
-while (dongle->is_held ||
-        get_current_time() < dongle->available_at ||
-        dongle->queue.requests[0].coder_id != my_id)
-{
-    pthread_cond_wait(&dongle->cv, &dongle->lock);
-}
-
-pop_from_heap(&dongle->queue);
-dongle->is_held = 1;
-
-
-pthread_mutex_unlock(&dongle->lock);
-
 void    swap_requests(t_request *a, t_request   *b)
 {
     t_request   temp = *a;
@@ -26,14 +9,18 @@ void    swap_requests(t_request *a, t_request   *b)
 
 void    push_to_heap(t_pqueue   *q, int coder_id, long  priority_score)
 {
+    int current;
+    int parent;
+
+
     if (q->size >= q->capacity)
         return;
 
-    int current = q->size;
+    current = q->size;
     q->requests[current].coder_id = coder_id;
     q->requests[current].priority_score = priority_score;
     q->size++;
-    int parent = (current - 1) / 2;
+    parent = (current - 1) / 2;
 
 
     while (current > 0 && q->requests[current].priority_score < q->requests[parent].priority_score)
@@ -64,15 +51,11 @@ void    pop_from_heap(t_pqueue  *q)
 
         if (left_child < q->size &&
             q->requests[left_child].priority_score < q->requests[smallest].priority_score)
-        {
             smallest = left_child;
-        }
 
         if (right_child < q->size &&
             q->requests[right_child].priority_score < q->requests[smallest].priority_score)
-        {
             smallest = right_child;
-        }
 
         if (smallest == current)
             break;

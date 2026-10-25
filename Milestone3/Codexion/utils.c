@@ -66,7 +66,7 @@ void    *monitor_routine(void *arg)
         }
         
         pthread_mutex_unlock(&hub->state_lock);
-        usleep(1000); // how to implement smart_sleep here. 
+        usleep(1000);
     }
     return (NULL);
 }

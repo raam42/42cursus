@@ -47,8 +47,8 @@ typedef struct  s_coder
 {
     int id;
     pthread_t   thread;
-    long    last_comp_start;
-    int comp_done;
+    long    last_compile_start;
+    int compiles_done;
     t_dongle    *left_dongle;
     t_dongle    *right_dongle;
     t_hub   *hub;
@@ -82,17 +82,17 @@ void    push_to_heap(t_pqueue  *q, int coder_id, long  priority_score);
 void    pop_from_heap(t_pqueue  *q);
 
 long    get_time_ms(void);
+void    wake_all_coders(t_hub  *hub);
 void    smart_sleep(t_hub   *hub, long  duration_ms);
 void    print_state(t_hub   *hub, int   id, char    *state);
-int is_num_str(const char   *str);
-
-void    *coder_routine(void *arg);
-void    acq_single_d(t_coder    *coder, t_dongle    *dongle);
-void    rel_single_d(t_coder   *coder, t_dongle    *dongle);
 
 void    *monitor_routine(void   *arg);
-void    wake_all_coders(t_hub  *hub);
 
+void    acq_single_d(t_coder    *coder, t_dongle    *dongle);
+void    rel_single_d(t_coder   *coder, t_dongle    *dongle);
+void    *coder_routine(void *arg);
+
+int is_num_str(const char   *str);
 int val_args(int    argc, char  **argv);
 int init_hub(t_hub  *hub, int   argc, char  **argv);
 
