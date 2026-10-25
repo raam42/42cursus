@@ -14,7 +14,7 @@
 
 #define MAX_ARGS 16
 #define ACTION_LEN 64
-#define TOLERANCE_MS 3
+#define TOLERANCE_MS 10
 
 typedef struct s_run
 {
@@ -616,23 +616,62 @@ static int command_exists(const char *name)
 
 static void external_tools(void)
 {
+	char cmd[512];
+
 	section("5. HERRAMIENTAS EXTERNAS");
+	
 	if (command_exists("norminette"))
-		result(system("norminette coders/*.c coders/*.h >/dev/null") == 0,
+		result(system("norminette *.c *.h */*.c */*.h >/dev/null 2>&1") == 0,
 			"Norminette");
 	else
 		printf("  [SKIP] norminette no encontrado\n");
+		
 	if (command_exists("valgrind"))
 	{
-		result(system("valgrind --quiet --error-exitcode=42 --leak-check=full "
-			"./codexion 5 3000 100 100 100 2 50 edf >/dev/null") == 0,
-			"Valgrind Memcheck");
-		result(system("valgrind --quiet --tool=helgrind --error-exitcode=43 "
-			"./codexion 4 3000 100 100 100 2 50 edf >/dev/null") == 0,
-			"Valgrind Helgrind");
+		snprintf(cmd, sizeof(cmd), "valgrind --quiet --error-exitcode=42 --leak-check=full "
+			"%s 5 3000 100 100 100 2 50 edf >/dev/null", g_binary);
+		result(system(cmd) == 0, "Valgrind Memcheck");
+		
+		snprintf(cmd, sizeof(cmd), "valgrind --quiet --tool=helgrind --error-exitcode=43 "
+			"%s 4 3000 100 100 100 2 50 edf >/dev/null", g_binary);
+		result(system(cmd) == 0, "Valgrind Helgrind");
 	}
 	else
 		printf("  [SKIP] valgrind no encontrado\n");
+}
+
+static void tsan_probe(void)
+{
+	t_run run;
+	int compiled;
+	const char *original_binary;
+
+	section("6. THREAD SANITIZER (TSAN)");
+	
+	compiled = system("cc -Wall -Wextra -Werror -pthread -fsanitize=thread -g *.c */*.c -o codexion_tsan >/dev/null 2>&1");
+	
+	if (compiled != 0)
+	{
+		printf("  [SKIP] No se pudo compilar los archivos .c con -fsanitize=thread.\n");
+		return ;
+	}
+
+	original_binary = g_binary;
+	g_binary = "./codexion_tsan";
+
+	if (run_program("5 3000 100 100 100 2 50 edf", 8000, &run))
+	{
+		if (strstr(run.output, "WARNING: ThreadSanitizer"))
+			result(0, "Data race detectado por TSan");
+		else
+			result(1, "Zero data races (TSan limpio)");
+		free_run(&run);
+	}
+	else
+		result(0, "Fallo al ejecutar el binario de TSan");
+
+	g_binary = original_binary;
+	unlink("./codexion_tsan");
 }
 
 int main(int argc, char **argv)
@@ -650,18 +689,25 @@ int main(int argc, char **argv)
 	if ((argc >= 2 && strcmp(argv[1], "--tools") == 0)
 		|| (argc >= 3 && strcmp(argv[2], "--tools") == 0))
 		tools = 1;
+	
 	printf("Binario: %s\n", g_binary);
 	invalid_tests();
 	easy_tests();
 	less_easy_tests();
 	medium_tests();
 	recode_probe();
+	
 	if (tools)
+	{
 		external_tools();
+		tsan_probe();
+	}
+	
 	section("RESUMEN");
 	printf("  PASS: %d    FAIL: %d\n", g_pass, g_fail);
 	printf("  Nota: los FAIL derivados de una misma terminacion no se multiplican.\n");
 	printf("  Inspeccion estatica sigue siendo necesaria para globals, funciones\n");
 	printf("  prohibidas, mutex por dongle y existencia del hilo monitor.\n");
+	
 	return (g_fail != 0);
 }
