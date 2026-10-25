@@ -69,5 +69,16 @@ int init_hub(t_hub  *hub, int   argc, char  **argv)
     hub->dongle_cooldown = atoi(argv[7]);
 
 
-    if (strcmp(argv[8]))
+    if (strcmp(argv[8], "edf") == 0)
+        hub->scheduler = SCHED_EDF;
+    else
+        hub->scheduler = SCHED_FIFO;
+
+    hub->dongles = malloc(sizeof(t_dongle) * hub->num_coders);
+    hub->coders = malloc(sizeof(t_coder) * hub->num_coders);
+
+
+    if (!hub->dongles || !hub->coders)
+        return (0);
+    return (1);
 }
