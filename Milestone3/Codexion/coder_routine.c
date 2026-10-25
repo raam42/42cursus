@@ -32,12 +32,18 @@ void    acq_single_d(t_coder    *coder, t_dongle    *dongle)
         priority_score = coder->last_compile_start + coder->hub->time_to_burnout;
 
     push_to_heap(&dongle->queue, coder->id, priority_score);
-    while (coder->hub->simulation_active &&
-          (dongle->is_held ||
-            get_time_ms() < dongle->available_at ||
-            dongle->queue.requests[0].coder_id != coder->id))
+    while (coder->hub->simulation_active)
     {
-        pthread_cond_wait(&dongle->cv, &dongle->lock);
+        if (dongle->is_held || dongle->queue.requests[0].coder_id != coder->id)
+            pthread_cond_wait(&dongle->cv, &dongle->lock);
+        else if (get_time_ms() < dongle->available_at)
+        {
+            pthread_mutex_unlock(&dongle->lock);
+            usleep(500);
+            pthread_mutex_lock(&dongle->lock);
+        }
+        else
+            break;
     }
 
     if (!coder->hub->simulation_active)

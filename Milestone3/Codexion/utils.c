@@ -42,7 +42,7 @@ void    *monitor_routine(void *arg)
             if (current_time - hub->coders[i].last_compile_start >= hub->time_to_burnout)
             {
                 pthread_mutex_lock(&hub->write_lock);
-                printf ("%ld %d burned out \n", current_time - hub ->start_time, hub->coders[i].id);
+                printf ("%ld %d burned out\n", current_time - hub ->start_time, hub->coders[i].id);
                 hub->simulation_active = 0;
                 pthread_mutex_unlock(&hub->write_lock);
                 pthread_mutex_unlock(&hub->state_lock);

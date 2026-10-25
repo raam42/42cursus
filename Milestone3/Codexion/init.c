@@ -44,6 +44,12 @@ int val_args(int    argc, char  **argv)
         i++;
     }
 
+    if (atoi(argv[1]) <= 0)
+    {
+        printf ("Error: number of coders must be greater than 0.\n");
+        return (0);
+    }
+
     if (strcmp(argv[8], "fifo") != 0 && strcmp(argv[8], "edf") != 0)
     {
         printf ("Error: Scheduler must be exactly 'fifo' or 'edf'.\n");
