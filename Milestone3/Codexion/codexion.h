@@ -91,7 +91,7 @@ void    acq_single_d(t_coder    *coder, t_dongle    *dongle);
 void    rel_single_d(t_coder   *coder, t_dongle    *dongle);
 
 void    *monitor_routine(void   *arg);
-void    wake_all(t_hub  *hub);
+void    wake_all_coders(t_hub  *hub);
 
 int val_args(int    argc, char  **argv);
 int init_hub(t_hub  *hub, int   argc, char  **argv);
