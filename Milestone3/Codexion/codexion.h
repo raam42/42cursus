@@ -78,7 +78,7 @@ struct  s_hub
 
 
 void    swap_requests(t_requests    *a, t_request   *b);
-void    push_to_heapp(t_pqueue  *q, int coder_id, long  priority_score);
+void    push_to_heap(t_pqueue  *q, int coder_id, long  priority_score);
 void    pop_from_heap(t_pqueue  *q);
 
 long    get_time_ms(void);
