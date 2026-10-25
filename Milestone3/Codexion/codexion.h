@@ -49,8 +49,8 @@ typedef struct  s_coder
     pthread_t   thread;
     long    last_comp_start;
     int comp_done;
-    t_dongle    *left;
-    t_dongle    *right;
+    t_dongle    *left_dongle;
+    t_dongle    *right_dongle;
     t_hub   *hub;
 }   t_coder;
 
@@ -58,16 +58,16 @@ typedef struct  s_coder
 struct  s_hub
 {
     int num_coders;
-    long    time_to_burn;
-    long    time_to_comp;
-    long    time_to_deb;
-    long    time_ti_ref;
-    int req_comp;
-    long    d_cooldown;
+    long    time_to_burnout;
+    long    time_to_compile;
+    long    time_to_debug;
+    long    time_to_refactor;
+    int required_compiles;
+    long    dongle_cooldown;
     t_scheduler scheduler;
 
-    long    strt_time;
-    int sim_active;
+    long    start_time;
+    int simulation_active;
 
     pthread_mutex_t write_lock;
     pthread_mutex_t state_lock;
@@ -77,7 +77,7 @@ struct  s_hub
 };
 
 
-void    swap_requests(t_requests    *a, t_request   *b);
+void    swap_requests(t_request    *a, t_request   *b);
 void    push_to_heap(t_pqueue  *q, int coder_id, long  priority_score);
 void    pop_from_heap(t_pqueue  *q);
 

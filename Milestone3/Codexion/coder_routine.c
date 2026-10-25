@@ -1,5 +1,4 @@
-#include <unistd.h>
-#include <stdio.h>
+#include "codexion.h"
 
 void    smart_sleep(t_hub*hub, long duration_ms)
 {

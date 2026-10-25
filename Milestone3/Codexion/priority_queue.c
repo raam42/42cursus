@@ -1,3 +1,6 @@
+#include "codexion.h"
+
+
 pthread_mutex_lock(&dongle->lock);
 push_to_heap(&dongle->queue, my_id, my_priority_score);
 
@@ -16,7 +19,7 @@ pthread_mutex_unlock(&dongle->lock);
 
 void    swap_requests(t_request *a, t_request   *b)
 {
-    t_requesttemp = *a;
+    t_request   temp = *a;
     *a = *b;
     *b = temp;
 }
@@ -66,7 +69,7 @@ void    pop_from_heap(t_pqueue  *q)
         }
 
         if (right_child < q->size &&
-            q->requests[right_child].priority_score < q->requests.priority_score)
+            q->requests[right_child].priority_score < q->requests[smallest].priority_score)
         {
             smallest = right_child;
         }

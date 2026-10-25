@@ -1,6 +1,4 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/time.h>
+#include "codexion.h"
 
 void    wake_all_coders(t_hub   *hub)
 {
