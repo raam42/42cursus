@@ -65,7 +65,7 @@ int init_hub(t_hub  *hub, int   argc, char  **argv)
 
 
     if (strcmp(argv[8], "edf") == 0)
-        hub->scheduler = SCHED_EDF;
+        hub->scheduler = POLICY_EDF;
     else
         hub->scheduler = SCHED_FIFO;
 

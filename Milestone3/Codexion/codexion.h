@@ -13,8 +13,8 @@ typedef struct s_hub    t_hub;
 
 typedef enum e_scheduler
 {
-    SCHED_FIFO,
-    SCHED_EDF
+    POLICY_FIFO,
+    POLICY_EDF
 }   t_scheduler;
 
 
