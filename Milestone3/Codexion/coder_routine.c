@@ -26,7 +26,7 @@ void    acq_single_d(t_coder    *coder, t_dongle    *dongle)
     pthread_mutex_lock(&dongle->lock);
 
 
-    if (coder->hub->scheduler == SCHED_FIFO)
+    if (coder->hub->scheduler == POLICY_FIFO)
         priority_score = get_time_ms();
     else
         priority_score = coder->last_compile_start + coder->hub->time_to_burnout;
