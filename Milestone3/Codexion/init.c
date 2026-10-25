@@ -73,7 +73,7 @@ int init_hub(t_hub  *hub, int   argc, char  **argv)
     if (strcmp(argv[8], "edf") == 0)
         hub->scheduler = POLICY_EDF;
     else
-        hub->scheduler = SCHED_FIFO;
+        hub->scheduler = POLICY_FIFO;
 
     hub->dongles = malloc(sizeof(t_dongle) * hub->num_coders);
     hub->coders = malloc(sizeof(t_coder) * hub->num_coders);
