@@ -5,7 +5,6 @@ CFLAGS	= -Wall -Wextra -Werror -pthread
 SRCS	= main.c \
 		  init.c \
 		  coder_routine.c \
-		  monitor.c \
 		  priority_queue.c \
 		  utils.c
 
