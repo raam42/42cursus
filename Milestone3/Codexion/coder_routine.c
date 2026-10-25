@@ -91,7 +91,7 @@ void    *coder_routine(void *arg)
         coder->compiles_done++;
         pthread_mutex_unlock(&coder->hub->state_lock);
         print_state(coder->hub, coder->id, "is compiling");
-        smart_sleep(coder->hub->time_to_compile * 1000);
+        smart_sleep(coder->hub, coder->hub->time_to_compile);
 
         rel_single_d(coder, second_dongle);
         rel_single_d(coder, first_dongle);
@@ -100,10 +100,10 @@ void    *coder_routine(void *arg)
         if (coder->hub->required_compiles > 0 && coder->compiles_done >= coder->hub->required_compiles)
             break;
         print_state(coder->hub, coder->id, "is debugging");
-        smart_sleep(coder->hub->time_to_debug * 1000);
+        smart_sleep(coder->hub, coder->hub->time_to_debug);
 
         print_state(coder->hub, coder->id, "is refactoring");
-        smart_sleep(coder->hub->time_to_refactor * 1000);
+        smart_sleep(coder->hub, coder->hub->time_to_refactor);
     }
     return (NULL);
 }

@@ -65,9 +65,9 @@ int main(int    argc, char  **argv)
         i++;
     }
 
-    i = 0:
+    i = 0;
 
-    
+
     while (i < hub.num_coders)
     {
         pthread_mutex_destroy(&hub.dongles[i].lock);
