@@ -8,7 +8,7 @@ SRCS	= main.c \
 		  priority_queue.c \
 		  utils.c
 
-OBJS	= $(SRCS: .c=.o)
+OBJS	= $(SRCS:.c=.o)
 
 all: $(NAME)
 
