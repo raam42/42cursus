@@ -1,5 +1,34 @@
 #include "codexion.h"
 
+
+static void init_mutexes(t_hub  *hub)
+{
+    int i;
+
+    i = 0;
+    while (i < hub->num_coders)
+    {
+        pthread_mutex_init(&hub->dongles[i].lock, NULL);
+        pthread_cond_init(&hub->dongles[i].cv, NULL);
+        hub->dongles[i].is_held = 0;
+        hub->dongles[i].available_at = 0;
+        hub->dongles[i].queue.capacity = hub->num_coders;
+        hub->dongles[i].queue.size = 0;
+        hub->dongles[i].queue.requests = malloc(sizeof(t_request) \
+                                            * hub->num_coders);
+        i++;
+    }
+}
+
+static void init_coders(t_hub   *hub)
+{
+    int i;
+    int next;
+
+    hub->start_time = get_time_ms();
+    i = 0;
+    while ()
+}
 int main(int    argc, char  **argv)
 {
     t_hub   hub;
