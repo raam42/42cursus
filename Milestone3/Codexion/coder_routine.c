@@ -3,10 +3,15 @@
 void    smart_sleep(t_hub*hub, long duration_ms)
 {
     long    start_time = get_time_ms();
+    int active;
 
-    while (hub->simulation_active)
+    while (1)
     {
-        if (get_time_ms() - start_time >= duration_ms)
+        pthread_mutex_lock(&hub->state_lock);
+        active = hub->simulation_active;
+        pthread_mutex_unlock(&hub->state_lock);
+
+        if (!active || get_time_ms() - start_time >= duration_ms)
             break;
         usleep(500);
     }
@@ -15,8 +20,10 @@ void    smart_sleep(t_hub*hub, long duration_ms)
 void    print_state(t_hub   *hub, int   id, char    *state)
 {
     pthread_mutex_lock(&hub->write_lock);
+    pthread_mutex_lock(&hub->state_lock);
     if (hub->simulation_active)
         printf ("%ld %d %s\n", get_time_ms() - hub->start_time, id, state);
+    pthread_mutex_unlock(&hub->state_lock);
     pthread_mutex_unlock(&hub->write_lock);
 }
 
@@ -72,6 +79,7 @@ void    *coder_routine(void *arg)
     t_coder *coder = (t_coder   *)arg;
     t_dongle    *first_dongle;
     t_dongle    *second_dongle;
+    int active;
 
 
     if (coder->id % 2 == 0)
@@ -85,12 +93,20 @@ void    *coder_routine(void *arg)
         second_dongle = coder->left_dongle;
     }
 
-    while (coder->hub->simulation_active)
+    while (1)
     {
         acq_single_d(coder, first_dongle);
-        if (!coder->hub->simulation_active) break;
+        pthread_mutex_lock(&coder->hub->state_lock);
+        active = coder->hub->simulation_active;
+        pthread_mutex_unlock(&coder->hub->state_lock);
+        if (!active)
+            break;
         acq_single_d(coder, second_dongle);
-        if (!coder->hub->simulation_active) break;
+        pthread_mutex_lock(&coder->hub->state_lock);
+        active = coder->hub->simulation_active;
+        pthread_mutex_unlock(&coder->hub->state_lock);
+        if (!active)
+            break;
 
         pthread_mutex_lock(&coder->hub->state_lock);
         coder->last_compile_start = get_time_ms();

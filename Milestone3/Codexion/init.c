@@ -75,6 +75,9 @@ int init_hub(t_hub  *hub, int   argc, char  **argv)
     else
         hub->scheduler = POLICY_FIFO;
 
+    hub->simulation_active = 1;
+    pthread_mutex_init(&hub->write_lock, NULL);
+    pthread_mutex_init(&hub->state_lock, NULL);
     hub->dongles = malloc(sizeof(t_dongle) * hub->num_coders);
     hub->coders = malloc(sizeof(t_coder) * hub->num_coders);
 
