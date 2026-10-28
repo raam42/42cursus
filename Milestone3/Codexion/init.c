@@ -1,3 +1,14 @@
+/* ************************************************************************* */
+/*                                                                           */
+/*                                                       :::      ::::::::   */
+/*   init.c                                            :+:      :+:    :+:   */
+/*                                                   +:+ +:+         +:+     */
+/*   By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+        */
+/*                                               +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/28 19:21:33 by rodrigoa         #+#    #+#             */
+/*   Updated: 2026/10/28 20:31:43 by rodrigoa        ###   ########.fr       */
+/*                                                                           */
+/* ************************************************************************* */
 #include "codexion.h"
 
 long    get_time_ms(void)
@@ -57,11 +68,13 @@ int val_args(int    argc, char  **argv)
     {
         if (!is_num_str(argv[i]))
         {
-            printf ("Error: Argument %d(%s) is not a valid positive integer.\n", i, argv[i]);
+            printf ("Error: Argument %d(%s) is not valid.\n", i, argv[i]);
             return (0);
         }
         i++;
     }
+    return (check_args(argv));
+}
 
 int init_hub(t_hub  *hub, char  **argv)
 {
@@ -76,10 +89,6 @@ int init_hub(t_hub  *hub, char  **argv)
         hub->scheduler = POLICY_EDF;
     else
         hub->scheduler = POLICY_FIFO;
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/main
     hub->simulation_active = 1;
     pthread_mutex_init(&hub->write_lock, NULL);
     pthread_mutex_init(&hub->state_lock, NULL);

@@ -1,9 +1,16 @@
+/* ************************************************************************* */
+/*                                                                           */
+/*                                                       :::      ::::::::   */
+/*   main.c                                            :+:      :+:    :+:   */
+/*                                                   +:+ +:+         +:+     */
+/*   By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+        */
+/*                                               +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/28 19:01:00 by rodrigoa         #+#    #+#             */
+/*   Updated: 2026/10/28 19:02:52 by rodrigoa        ###   ########.fr       */
+/*                                                                           */
+/* ************************************************************************* */
 #include "codexion.h"
 
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/main
 static void init_mutexes(t_hub  *hub)
 {
     int i;
@@ -30,7 +37,6 @@ static void init_coders(t_hub   *hub)
 
     hub->start_time = get_time_ms();
     i = 0;
-<<<<<<< HEAD
     while (i < hub->num_coders)
     {
         next = (i + 1) % hub->num_coders;
@@ -53,7 +59,7 @@ static void start_and_join(t_hub    *hub)
     while (i < hub->num_coders)
     {
         pthread_create(&hub->coders[i].thread, NULL, \
-                                coder_routine, &hub->coders[i]);
+            coder_routine, &hub->coders[i]);
         i++;
     }
     pthread_create(&monitor, NULL, monitor_routine, hub);
@@ -84,10 +90,6 @@ static void cleanup_hub(t_hub   *hub)
     free(hub->coders);
 }
 
-=======
-    while ()
-}
->>>>>>> refs/remotes/origin/main
 int main(int    argc, char  **argv)
 {
     t_hub   hub;

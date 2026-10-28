@@ -1,3 +1,14 @@
+/* ************************************************************************* */
+/*                                                                           */
+/*                                                       :::      ::::::::   */
+/*   utils.c                                           :+:      :+:    :+:   */
+/*                                                   +:+ +:+         +:+     */
+/*   By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+        */
+/*                                               +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/28 19:21:48 by rodrigoa         #+#    #+#             */
+/*   Updated: 2026/10/28 20:32:35 by rodrigoa        ###   ########.fr       */
+/*                                                                           */
+/* ************************************************************************* */
 #include "codexion.h"
 
 void    smart_sleep(t_hub*hub, long duration_ms)
@@ -46,8 +57,8 @@ static int  check_burnout(t_hub *hub, int i)
     long    current_time;
 
     current_time = get_time_ms();
-    if (current_time - hub->coders[ì].last_compile_start \
-        >= hub->time_to_burnout);
+    if (current_time - hub->coders[i].last_compile_start \
+        >= hub->time_to_burnout)
     {
         pthread_mutex_lock(&hub->write_lock);
         printf ("%ld %d burned out\n", current_time - hub->start_time, \

@@ -1,3 +1,14 @@
+/* ************************************************************************* */
+/*                                                                           */
+/*                                                       :::      ::::::::   */
+/*   coder_routine.c                                   :+:      :+:    :+:   */
+/*                                                   +:+ +:+         +:+     */
+/*   By: rodrigoa <rodrigoa@student.42madrid.com>  +#+  +:+       +#+        */
+/*                                               +#+#+#+#+#+   +#+           */
+/*   Created: 2026/10/28 19:03:15 by rodrigoa         #+#    #+#             */
+/*   Updated: 2026/10/28 19:17:51 by rodrigoa        ###   ########.fr       */
+/*                                                                           */
+/* ************************************************************************* */
 #include "codexion.h"
 
 static void wait_for_dongle(t_coder *coder, t_dongle    *dongle)
@@ -94,8 +105,8 @@ void    *coder_routine(void *arg)
         if (!perform_compile(coder, d1, d2))
             break;
         if (coder->hub->required_compiles > 0 && \
-                coder->compiles_done >= coder->hub->required_compiles)
-            break;
+            coder->compiles_done >= coder->hub->required_compiles)
+          break;
         print_state(coder->hub, coder->id, "is debugging");
         smart_sleep(coder->hub, coder->hub->time_to_debug);
         print_state(coder->hub, coder->id, "is refactoring");
