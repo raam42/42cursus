@@ -1,5 +1,9 @@
 #include "codexion.h"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/main
 static void init_mutexes(t_hub  *hub)
 {
     int i;
@@ -26,6 +30,7 @@ static void init_coders(t_hub   *hub)
 
     hub->start_time = get_time_ms();
     i = 0;
+<<<<<<< HEAD
     while (i < hub->num_coders)
     {
         next = (i + 1) % hub->num_coders;
@@ -79,6 +84,10 @@ static void cleanup_hub(t_hub   *hub)
     free(hub->coders);
 }
 
+=======
+    while ()
+}
+>>>>>>> refs/remotes/origin/main
 int main(int    argc, char  **argv)
 {
     t_hub   hub;

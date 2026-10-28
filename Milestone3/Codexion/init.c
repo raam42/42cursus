@@ -76,6 +76,10 @@ int init_hub(t_hub  *hub, char  **argv)
         hub->scheduler = POLICY_EDF;
     else
         hub->scheduler = POLICY_FIFO;
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/main
     hub->simulation_active = 1;
     pthread_mutex_init(&hub->write_lock, NULL);
     pthread_mutex_init(&hub->state_lock, NULL);
