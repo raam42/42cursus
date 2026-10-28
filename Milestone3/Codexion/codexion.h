@@ -21,7 +21,7 @@ typedef enum e_scheduler
 typedef struct s_request
 {
     int coder_id;
-    long    priority_score;
+    long    p_score;
 }   t_request;
 
 
@@ -78,7 +78,7 @@ struct  s_hub
 
 
 void    swap_requests(t_request    *a, t_request   *b);
-void    push_to_heap(t_pqueue  *q, int coder_id, long  priority_score);
+void    push_to_heap(t_pqueue  *q, int coder_id, long  p_score);
 void    pop_from_heap(t_pqueue  *q);
 
 long    get_time_ms(void);
@@ -94,6 +94,6 @@ void    *coder_routine(void *arg);
 
 int is_num_str(const char   *str);
 int val_args(int    argc, char  **argv);
-int init_hub(t_hub  *hub, int   argc, char  **argv);
+int init_hub(t_hub  *hub, char  **argv);
 
 #endif

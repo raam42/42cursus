@@ -2,31 +2,30 @@
 
 void    swap_requests(t_request *a, t_request   *b)
 {
-    t_request   temp = *a;
+    t_request   temp;
+
+    temp = *a;
     *a = *b;
     *b = temp;
 }
 
-void    push_to_heap(t_pqueue   *q, int coder_id, long  priority_score)
+void    push_to_heap(t_pqueue   *q, int coder_id, long  p_score)
 {
     int current;
     int parent;
 
-
     if (q->size >= q->capacity)
         return;
-
     current = q->size;
     q->requests[current].coder_id = coder_id;
-    q->requests[current].priority_score = priority_score;
+    q->requests[current].p_score = p_score;
     q->size++;
     parent = (current - 1) / 2;
-
-
-    while (current > 0 && q->requests[current].priority_score < q->requests[parent].priority_score)
+    while (current > 0 && \
+            q->requests[current].p_score < \
+            q->requests[parent].p_score)
     {
         swap_requests(&q->requests[current], &q->requests[parent]);
-
         current = parent;
         parent = (current - 1) / 2;
     }
@@ -34,32 +33,29 @@ void    push_to_heap(t_pqueue   *q, int coder_id, long  priority_score)
 
 void    pop_from_heap(t_pqueue  *q)
 {
+    int current;
+    int left;
+    int right;
+    int smallest;
+
     if (q->size <= 0)
         return;
-
     q->requests[0] = q->requests[q->size - 1];
     q->size--;
-    int current = 0;
-
-
+    current = 0;
     while (1)
     {
-        int left_child = 2 * current + 1;
-        int right_child = 2 * current + 2;
-        int smallest = current;
-
-
-        if (left_child < q->size &&
-            q->requests[left_child].priority_score < q->requests[smallest].priority_score)
-            smallest = left_child;
-
-        if (right_child < q->size &&
-            q->requests[right_child].priority_score < q->requests[smallest].priority_score)
-            smallest = right_child;
-
+        left = 2 * current + 1;
+        right = 2 * current + 2;
+        smallest = current;
+        if (left < q->size &&
+            q->requests[left].p_score < q->requests[smallest].p_score)
+            smallest = left;
+        if (right < q->size &&
+            q->requests[right].p_score < q->requests[smallest].p_score)
+            smallest = right;
         if (smallest == current)
             break;
-
         swap_requests(&q->requests[current], &q->requests[smallest]);
         current = smallest;
     }
