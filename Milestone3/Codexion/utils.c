@@ -30,11 +30,13 @@ void    smart_sleep(t_hub*hub, long duration_ms)
 
 void    print_state(t_hub   *hub, int   id, char    *state)
 {
-    pthread_mutex_lock(&hub->write_lock);
     pthread_mutex_lock(&hub->state_lock);
     if (hub->simulation_active)
+    {
+        pthread_mutex_lock(&hub->write_lock);
         printf ("%ld %d %s\n", get_time_ms() - hub->start_time, id, state);
-    pthread_mutex_unlock(&hub->write_lock);
+        pthread_mutex_unlock(&hub->write_lock);
+    }
     pthread_mutex_unlock(&hub->state_lock);
 }
 
