@@ -81,8 +81,8 @@ static int  perform_compile(t_coder *coder, t_dongle    *d1, t_dongle   *d2)
     pthread_mutex_unlock(&coder->hub->state_lock);
     print_state(coder->hub, coder->id, "is compiling");
     smart_sleep(coder->hub, coder->hub->time_to_compile);
-    rel_single_d(coder, d1);
     rel_single_d(coder, d2);
+    rel_single_d(coder, d1);
     return (1);
 }
 

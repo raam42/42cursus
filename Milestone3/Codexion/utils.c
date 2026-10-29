@@ -92,7 +92,8 @@ void    *monitor_routine(void *arg)
                 return (NULL);
             if (hub->required_compiles > 0 && \
                 hub->coders[i].compiles_done >= hub->required_compiles)
-                i++;
+                finished++;
+            i++;
         }
         if (hub->required_compiles > 0 && finished == hub->num_coders)
         {
